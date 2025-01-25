@@ -1,1 +1,24 @@
-spring.application.name=mini-project
+spring:
+  application:
+    name=mini-project
+
+springdoc:
+  swagger-ui:
+    # Swagger UI ???? ?? ??
+    path: /swagger-ui.html
+    # Group ? ?? ?? (ASC ????, DESC ????)
+    groups-order: DESC
+    # API ?? ? ?? ?? (method, alpha)
+    operationsSorter: method
+    # Swagger UI? ??? ? ????? ???? ?? URL ??
+    disable-swagger-default-url: true
+    # API ?? ? ?? ??? ??
+    display-request-duration: true
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  paths-to-match:
+    - /**
+

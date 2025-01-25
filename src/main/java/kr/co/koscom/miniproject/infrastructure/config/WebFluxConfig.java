@@ -1,4 +1,4 @@
-package kr.co.koscom.miniproject.infrastructure;
+package kr.co.koscom.miniproject.infrastructure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
