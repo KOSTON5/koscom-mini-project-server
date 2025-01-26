@@ -6,10 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/clova")
-public class NaverClovaController {
+public class NaverClovaController implements NaverClovaControllerDocs {
 
-    @PostMapping("/stt")
     public NaverClovaSttResponse speechToText() {
         return new NaverClovaSttResponse("Hello, World!");
     }
