@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 
-@Tag(name = "네이버 클로바 API", description = "네이버 클로바 호출 API 명세서입니다.")
+@Tag(name = "네이버 클로바 API", description = "네이버 클로바를 호출하는 API 명세서입니다.")
 @RequestMapping("/api/clova")
 public interface NaverClovaControllerDocs {
 
-    @Operation(summary = "Naver Clova STT", description = "STT API를 호출하여 음성을 텍스트로 변환합니다.")
+    @Operation(summary = "Speech To Text", description = "STT 서비스를 통해 음성을 텍스트로 변환합니다.")
     @PostMapping("/stt")
     ResponseEntity<NaverClovaSttResponse> convertSpeech2Text(
         @RequestPart NaverClovaSttRequest request

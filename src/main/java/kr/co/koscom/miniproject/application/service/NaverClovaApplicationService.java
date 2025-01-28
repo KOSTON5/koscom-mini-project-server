@@ -13,7 +13,6 @@ public class NaverClovaApplicationService {
     private final NaverClovaClientPort<NaverClovaSttRequest, NaverClovaSttResponse> naverClovaClientPort;
 
     public NaverClovaSttResponse convertSpeech2Text(NaverClovaSttRequest request) {
-
         return naverClovaClientPort.sendRequest(request);
     }
 }
