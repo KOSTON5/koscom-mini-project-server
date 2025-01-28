@@ -1,4 +1,4 @@
-package kr.co.koscom.miniproject.presentation.dto.response;
+package kr.co.koscom.miniproject.adapter.out.client.naverclova;
 
 public record NaverClovaTtsResponse(
         String message
