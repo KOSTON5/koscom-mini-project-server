@@ -1,4 +1,4 @@
-package kr.co.koscom.miniproject.adapter.out.rest;
+package kr.co.koscom.miniproject.adapter.in.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,7 +15,7 @@ public interface NaverClovaControllerDocs {
 
     @Operation(summary = "Naver Clova STT", description = "STT API를 호출하여 음성을 텍스트로 변환합니다.")
     @PostMapping("/stt")
-    ResponseEntity<NaverClovaSttResponse> speechToText(
+    ResponseEntity<NaverClovaSttResponse> convertSpeech2Text(
         @RequestPart NaverClovaSttRequest request
     );
 }

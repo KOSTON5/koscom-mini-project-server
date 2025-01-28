@@ -1,4 +1,4 @@
-package kr.co.koscom.miniproject.adapter.out.rest;
+package kr.co.koscom.miniproject.adapter.in.rest;
 
 import kr.co.koscom.miniproject.domain.stock.service.StockService;
 import lombok.RequiredArgsConstructor;

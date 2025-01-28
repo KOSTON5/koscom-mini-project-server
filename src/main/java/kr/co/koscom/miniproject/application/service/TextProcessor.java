@@ -15,10 +15,10 @@ public class TextProcessor {
     private final NaverClovaClientPort<NaverClovaSttRequest, NaverClovaSttResponse> naverClovaClientPort;
     private final OpenAiClientPort<OpenAiRequest, Object> openAiClientPort;
     public String processSpeechToText(NaverClovaSttRequest request) {
-        NaverClovaSttResponse response = naverClovaClientPort.sendRequest(request);
+        NaverClovaSttResponse naverClovaSttResponse = naverClovaClientPort.sendRequest(request);
 
         // todo : GPT로 부터 받은 응답 처리
-        Object chat = openAiClientPort.chat(new OpenAiRequest(response.text()));
+        Object chat = openAiClientPort.chat(new OpenAiRequest(naverClovaSttResponse.text()));
 
         // todo : 분기 처리 로직 추가
         return "";

@@ -1,4 +1,4 @@
-package kr.co.koscom.miniproject.adapter.out.rest;
+package kr.co.koscom.miniproject.adapter.in.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
