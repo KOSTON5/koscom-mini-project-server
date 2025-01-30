@@ -3,6 +3,7 @@ package kr.co.koscom.miniproject.adapter.in.rest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.koscom.miniproject.adapter.out.client.openai.OpenAiRequest;
+import kr.co.koscom.miniproject.adapter.out.client.openai.OpenAiResponse;
 import kr.co.koscom.miniproject.application.dto.response.AnalyzeOrderResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 public interface OpenAiControllerDocs {
     @Operation(summary = "Analyze Text", description = "LLM 서버가 제대로 동작하는지 확인하기 위한 API 입니다.")
     @PostMapping("/analyze")
-    ResponseEntity<AnalyzeOrderResponse> analyzeText (
+    ResponseEntity<OpenAiResponse> analyzeText (
         @RequestPart OpenAiRequest openAiRequest
     );
 

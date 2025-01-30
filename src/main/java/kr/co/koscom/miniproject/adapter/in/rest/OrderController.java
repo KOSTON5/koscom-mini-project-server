@@ -18,7 +18,7 @@ public class OrderController implements OrderControllerDocs {
     @Override
     public ResponseEntity<AnalyzeOrderResponse> analyzeOrder(
         NaverClovaSttRequest naverClovaSttRequest) {
-        return null;
+        return ResponseEntity.ok(orderApplicationService.createOrderByLLM(naverClovaSttRequest));
     }
 
     @Override

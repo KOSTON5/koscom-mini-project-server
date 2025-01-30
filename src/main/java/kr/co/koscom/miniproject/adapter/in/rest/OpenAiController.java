@@ -1,6 +1,7 @@
 package kr.co.koscom.miniproject.adapter.in.rest;
 
 import kr.co.koscom.miniproject.adapter.out.client.openai.OpenAiRequest;
+import kr.co.koscom.miniproject.adapter.out.client.openai.OpenAiResponse;
 import kr.co.koscom.miniproject.application.dto.response.AnalyzeOrderResponse;
 import kr.co.koscom.miniproject.application.service.OpenAiApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class OpenAiController implements OpenAiControllerDocs {
      * 사용 하지 않는 API
      */
     @Override
-    public ResponseEntity<AnalyzeOrderResponse> analyzeText(OpenAiRequest openAiRequest) {
+    public ResponseEntity<OpenAiResponse> analyzeText(OpenAiRequest openAiRequest) {
         return ResponseEntity.ok(openAiApplicationService.analyzeText(openAiRequest));
     }
 }

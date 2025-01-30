@@ -2,6 +2,7 @@ package kr.co.koscom.miniproject.application.service;
 
 import java.math.BigDecimal;
 import kr.co.koscom.miniproject.adapter.out.client.openai.OpenAiRequest;
+import kr.co.koscom.miniproject.adapter.out.client.openai.OpenAiResponse;
 import kr.co.koscom.miniproject.application.dto.response.AnalyzeOrderResponse;
 import kr.co.koscom.miniproject.application.port.out.OpenAiClientPort;
 import kr.co.koscom.miniproject.domain.order.entity.OrderEntity;
@@ -15,11 +16,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpenAiApplicationService {
 
-    private final OpenAiClientPort<OpenAiRequest, AnalyzeOrderResponse> openAiClient;
+    private final OpenAiClientPort<OpenAiRequest, OpenAiResponse> openAiClient;
     private final OrderService orderService;
 
-    public AnalyzeOrderResponse analyzeText(OpenAiRequest openAiRequest) {
-        AnalyzeOrderResponse response = openAiClient.chat(openAiRequest);
+    public OpenAiResponse analyzeText(OpenAiRequest openAiRequest) {
+        OpenAiResponse response = openAiClient.chat(openAiRequest);
 
         Long temporalOrderId = orderService.createTemporalOrder(
             OrderEntity.builder()
@@ -32,6 +33,6 @@ public class OpenAiApplicationService {
 	.build()
         );
 
-        return response.toBuilder().orderId(temporalOrderId).build();
+        return response;
     }
 }
