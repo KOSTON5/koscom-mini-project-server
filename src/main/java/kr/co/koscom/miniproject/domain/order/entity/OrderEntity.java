@@ -14,14 +14,18 @@ import java.time.LocalDate;
 import kr.co.koscom.miniproject.domain.order.vo.OrderCondition;
 import kr.co.koscom.miniproject.domain.order.vo.OrderType;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 @Table(name = "tb_order")
+@Builder(toBuilder = true)
 public class OrderEntity {
 
     @Id

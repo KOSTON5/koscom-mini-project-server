@@ -4,8 +4,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record OpenAiResponse(
-    @NotNull String orderType, @NotNull String ticker, @NotNull int quantity, @NotNull int price,
-    @NotNull String orderCondition, @NotNull LocalDate expirationTime, @NotNull Long orderId
+    @NotNull String orderType, @NotNull String ticker, @NotNull String stockName, @NotNull int quantity, @NotNull int price,
+    @NotNull String orderCondition, LocalDate expirationTime
 ) {
 
 }

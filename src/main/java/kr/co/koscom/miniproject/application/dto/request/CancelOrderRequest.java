@@ -1,5 +1,7 @@
 package kr.co.koscom.miniproject.application.dto.request;
 
-public record CancelOrderRequest() {
+public record CancelOrderRequest(
+    Long orderId
+) {
 
 }

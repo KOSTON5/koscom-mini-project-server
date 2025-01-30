@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 @RequestMapping("/api/clova")
 public interface NaverClovaControllerDocs {
 
-    @Operation(summary = "Speech To Text", description = "STT 서비스를 통해 음성을 텍스트로 변환합니다.")
+    @Operation(summary = "Speech To Text", description = "STT 서비스를 개별적으로 테스트할 때 사용하는 API 입니다.")
     @PostMapping("/stt")
     ResponseEntity<NaverClovaSttResponse> convertSpeech2Text(
         @RequestPart NaverClovaSttRequest request
