@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
@@ -22,6 +21,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "tb_users")
 public class UserEntity {
+
+    private final int ZERO = 0;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,8 +41,18 @@ public class UserEntity {
     @Column(name = "user_password")
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<OrderEntity> orders = new ArrayList<>();
 
+    public boolean isNotEnoughBalance(final BigDecimal totalPrice) {
+        return balance.compareTo(totalPrice) < ZERO;
+    }
+
+    public void decreaseBalance(BigDecimal totalPrice) {
+        balance = balance.subtract(totalPrice);
+    }
+
+    public void increaseBalance(BigDecimal totalPrice) {
+        balance = balance.add(totalPrice);
+    }
 }
