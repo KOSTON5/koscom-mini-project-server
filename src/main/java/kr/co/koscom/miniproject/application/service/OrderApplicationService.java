@@ -88,26 +88,12 @@ public class OrderApplicationService {
             .orElseThrow(NaverClovaSttException::new);
     }
 
-    public Long executeOrder(
-        ExecuteOrderRequest executeOrderRequest
-    ) {
-        OrderType orderType = OrderType.from(executeOrderRequest.orderType());
-
-        switch (orderType) {
-            case BUY:
-	return processBuyOrder(executeOrderRequest.orderId());
-            case SELL:
-	return processSellOrder(executeOrderRequest.orderId());
-            default:
-        }
-
-        return null;
-    }
-
     // todo : 최종 반환 결과 (예, 잔고 몇몇) 를 도출해야 할듯
     @Transactional
-    public Long processBuyOrder(Long orderId) {
-        OrderEntity order = orderService.findOrderById(orderId);
+    public Long executeBuyOrder(
+        ExecuteOrderRequest executeOrderRequest
+    ) {
+        OrderEntity order = orderService.findPendingOrder(executeOrderRequest.orderId());
         UserEntity user = order.getUser();
         StockEntity stock = stockService.findStockByTicker(order.getTicker());
 
@@ -115,12 +101,12 @@ public class OrderApplicationService {
             .multiply(order.getQuantity());
 
         userService.decreaseBalance(user, totalPrice);
-        return order.getId();
-    }
+        return order.getId();    }
+
 
     @Transactional
-    public Long processSellOrder(Long orderId) {
-        OrderEntity order = orderService.findOrderById(orderId);
+    public Long executeSellOrder(ExecuteOrderRequest executeOrderRequest) {
+        OrderEntity order = orderService.findPendingOrder(executeOrderRequest.orderId());
         UserEntity user = order.getUser();
         StockEntity stock = stockService.findStockByTicker(order.getTicker());
 
@@ -131,8 +117,8 @@ public class OrderApplicationService {
         return order.getId();
     }
 
-
+    @Transactional
     public void cancelOrder(CancelOrderRequest cancelOrderRequest) {
-        orderService.deleteOrder(cancelOrderRequest.orderId());
+        orderService.cancelOrder(cancelOrderRequest.orderId());
     }
 }
