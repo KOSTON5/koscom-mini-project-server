@@ -18,12 +18,18 @@ public class OrderController implements OrderControllerDocs {
     @Override
     public ResponseEntity<AnalyzeOrderResponse> analyzeOrder(
         NaverClovaSttRequest naverClovaSttRequest) {
-        return ResponseEntity.ok(orderApplicationService.createOrderByLLM(naverClovaSttRequest));
+        return ResponseEntity.ok(orderApplicationService.processLLMOrder(naverClovaSttRequest));
     }
 
     @Override
-    public ResponseEntity<Void> executeOrder(ExecuteOrderRequest executeOrderRequest) {
-        orderApplicationService.executeOrder(executeOrderRequest);
+    public ResponseEntity<Void> executeBuyOrder(ExecuteOrderRequest executeOrderRequest) {
+        orderApplicationService.executeBuyOrder(executeOrderRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<Void> executeSellOrder(ExecuteOrderRequest executeOrderRequest) {
+        orderApplicationService.executeSellOrder(executeOrderRequest);
         return ResponseEntity.ok().build();
     }
 
