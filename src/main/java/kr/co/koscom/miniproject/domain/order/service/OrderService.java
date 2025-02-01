@@ -3,11 +3,12 @@ package kr.co.koscom.miniproject.domain.order.service;
 import kr.co.koscom.miniproject.adapter.out.jpa.OrderJpaRepository;
 import kr.co.koscom.miniproject.domain.order.entity.OrderEntity;
 import kr.co.koscom.miniproject.domain.order.vo.OrderStatus;
+import kr.co.koscom.miniproject.infrastructure.annotation.DomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
-@Service
+@DomainService
 public class OrderService {
 
     private final OrderJpaRepository orderJpaRepository;

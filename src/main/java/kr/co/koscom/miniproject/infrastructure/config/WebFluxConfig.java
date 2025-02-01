@@ -1,12 +1,19 @@
 package kr.co.koscom.miniproject.infrastructure.config;
 
+import kr.co.koscom.miniproject.infrastructure.resolver.UserIdParameterResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer;
 
 @Configuration
 public class WebFluxConfig implements WebFluxConfigurer {
+
+    @Override
+    public void configureArgumentResolvers(ArgumentResolverConfigurer configurer) {
+        configurer.addCustomResolver(new UserIdParameterResolver());
+    }
 
     @Bean
     public WebClient webClient() {
