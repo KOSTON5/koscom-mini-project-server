@@ -1,4 +1,4 @@
-package kr.co.koscom.miniproject.adapter.out.client.naverclova;
+package kr.co.koscom.miniproject.adapter.out.client.naver.clova;
 
 import kr.co.koscom.miniproject.application.port.out.NaverClovaClientPort;
 import lombok.RequiredArgsConstructor;

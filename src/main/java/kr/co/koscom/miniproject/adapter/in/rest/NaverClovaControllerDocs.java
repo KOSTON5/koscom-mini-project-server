@@ -2,8 +2,8 @@ package kr.co.koscom.miniproject.adapter.in.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.co.koscom.miniproject.adapter.out.client.naverclova.NaverClovaSttRequest;
-import kr.co.koscom.miniproject.adapter.out.client.naverclova.NaverClovaSttResponse;
+import kr.co.koscom.miniproject.adapter.out.client.naver.clova.NaverClovaSttRequest;
+import kr.co.koscom.miniproject.adapter.out.client.naver.clova.NaverClovaSttResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

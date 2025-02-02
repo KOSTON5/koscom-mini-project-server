@@ -3,8 +3,8 @@ package kr.co.koscom.miniproject.adapter.in.rest;
 import static kr.co.koscom.miniproject.infrastructure.utils.FileValidator.isNotAudioType;
 import static kr.co.koscom.miniproject.infrastructure.utils.FileValidator.isSizeOver;
 
-import kr.co.koscom.miniproject.adapter.out.client.naverclova.NaverClovaSttRequest;
-import kr.co.koscom.miniproject.adapter.out.client.naverclova.NaverClovaSttResponse;
+import kr.co.koscom.miniproject.adapter.out.client.naver.clova.NaverClovaSttRequest;
+import kr.co.koscom.miniproject.adapter.out.client.naver.clova.NaverClovaSttResponse;
 import kr.co.koscom.miniproject.application.service.NaverClovaApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
