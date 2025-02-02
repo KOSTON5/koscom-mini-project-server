@@ -28,4 +28,8 @@ public class OrderService {
         return orderJpaRepository.findByIdAndOrderStatus(orderId, OrderStatus.PENDING)
             .orElseThrow(() -> new IllegalArgumentException("Order not found"));
     }
+
+    public void changeOrderStatus(OrderEntity order, OrderStatus orderStatus) {
+        order.changeOrderStatus(orderStatus);
+    }
 }

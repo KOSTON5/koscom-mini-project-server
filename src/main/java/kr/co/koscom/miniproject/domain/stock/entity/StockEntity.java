@@ -35,9 +35,9 @@ public class StockEntity {
     private String name;
 
     @Column(name = "stock_current_price")
-    private BigDecimal currentPrice;
+    private Integer currentPrice;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "stock_ticker")
-    public List<OrderEntity> orders = new ArrayList<>();
+    public void updateCurrentPrice(final Integer realtimeMarketPrice) {
+        this.currentPrice = realtimeMarketPrice;
+    }
 }

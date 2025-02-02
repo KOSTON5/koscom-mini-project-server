@@ -51,10 +51,10 @@ public class OrderEntity {
     private OrderStatus orderStatus;
 
     @Column(name = "order_price")
-    private BigDecimal price;
+    private Integer price;
 
     @Column(name = "order_quantity")
-    private BigDecimal quantity;
+    private Integer quantity;
 
     @Column(name = "order_expiration_time")
     private LocalDate expirationTime;
@@ -64,6 +64,14 @@ public class OrderEntity {
     private UserEntity user;
 
     public void cancel() {
-        this.orderStatus = OrderStatus.CANCELED;
+        this.orderStatus = OrderStatus.FAILED;
+    }
+
+    public void updatePrice(final Integer realtimePrice) {
+        this.price = realtimePrice;
+    }
+
+    public void changeOrderStatus(final OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

@@ -1,38 +1,21 @@
 package kr.co.koscom.miniproject.application.service;
 
-import java.math.BigDecimal;
-import kr.co.koscom.miniproject.adapter.out.client.openai.OpenAiRequest;
-import kr.co.koscom.miniproject.adapter.out.client.openai.OpenAiResponse;
-import kr.co.koscom.miniproject.application.dto.response.AnalyzeOrderResponse;
+import kr.co.koscom.miniproject.application.dto.request.AnalyzeTextRequest;
+import kr.co.koscom.miniproject.application.dto.response.AnalyzeTextResponse;
 import kr.co.koscom.miniproject.application.port.out.OpenAiClientPort;
-import kr.co.koscom.miniproject.domain.order.entity.OrderEntity;
-import kr.co.koscom.miniproject.domain.order.service.OrderService;
-import kr.co.koscom.miniproject.domain.order.vo.OrderCondition;
-import kr.co.koscom.miniproject.domain.order.vo.OrderType;
+import kr.co.koscom.miniproject.infrastructure.annotation.ApplicationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @RequiredArgsConstructor
-@Service
+@ApplicationService
 public class OpenAiApplicationService {
 
-    private final OpenAiClientPort<OpenAiRequest, OpenAiResponse> openAiClient;
-    private final OrderService orderService;
+    private final OpenAiClientPort<AnalyzeTextRequest, AnalyzeTextResponse> openAiClient;
 
-    public OpenAiResponse analyzeText(OpenAiRequest openAiRequest) {
-        OpenAiResponse response = openAiClient.chat(openAiRequest);
-
-        Long temporalOrderId = orderService.createTemporalOrder(
-            OrderEntity.builder()
-	.ticker(response.ticker())
-	.orderType(OrderType.from(response.orderType()))
-	.orderCondition(OrderCondition.from(response.orderCondition()))
-	.price(BigDecimal.valueOf(response.price()))
-	.quantity(BigDecimal.valueOf(response.quantity()))
-	.expirationTime(response.expirationTime())
-	.build()
-        );
-
-        return response;
+    public AnalyzeTextResponse analyzeText(AnalyzeTextRequest request) {
+        return openAiClient.chat(request);
     }
 }

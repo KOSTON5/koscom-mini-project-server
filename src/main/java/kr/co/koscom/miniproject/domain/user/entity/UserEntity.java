@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.koscom.miniproject.domain.order.entity.OrderEntity;
@@ -33,7 +32,7 @@ public class UserEntity {
     private String name;
 
     @Column(name = "user_balance")
-    private BigDecimal balance;
+    private Integer balance;
 
     @Column(name = "user_email")
     private String email;
@@ -44,15 +43,15 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<OrderEntity> orders = new ArrayList<>();
 
-    public boolean isNotEnoughBalance(final BigDecimal totalPrice) {
+    public boolean hasNotEnoughBalance(final Integer totalPrice) {
         return balance.compareTo(totalPrice) < ZERO;
     }
 
-    public void decreaseBalance(BigDecimal totalPrice) {
-        balance = balance.subtract(totalPrice);
+    public void decreaseBalance(final Integer totalPrice) {
+        balance = balance - totalPrice;
     }
 
-    public void increaseBalance(BigDecimal totalPrice) {
-        balance = balance.add(totalPrice);
+    public void increaseBalance(final Integer totalPrice) {
+        balance = balance + totalPrice;
     }
 }

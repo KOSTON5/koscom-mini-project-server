@@ -1,7 +1,8 @@
 package kr.co.koscom.miniproject.adapter.in.rest;
 
-import kr.co.koscom.miniproject.adapter.out.client.naverclova.NaverClovaSttRequest;
+import kr.co.koscom.miniproject.adapter.out.client.naver.clova.NaverClovaSttRequest;
 import kr.co.koscom.miniproject.application.dto.request.CancelOrderRequest;
+import kr.co.koscom.miniproject.application.dto.request.ExecuteMarketOrderRequest;
 import kr.co.koscom.miniproject.application.dto.request.ExecuteOrderRequest;
 import kr.co.koscom.miniproject.application.dto.response.AnalyzeOrderResponse;
 import kr.co.koscom.miniproject.application.service.OrderApplicationService;
@@ -36,6 +37,15 @@ public class OrderController implements OrderControllerDocs {
     @Override
     public ResponseEntity<Void> cancelOrder(CancelOrderRequest cancelOrderRequest) {
         orderApplicationService.cancelOrder(cancelOrderRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<Void> executeMarketBuyOrder(
+        Long currentUserId,
+        ExecuteMarketOrderRequest executeMarketOrderRequest
+    ) {
+        orderApplicationService.executeMarketBuyOrder(currentUserId, executeMarketOrderRequest);
         return ResponseEntity.ok().build();
     }
 
