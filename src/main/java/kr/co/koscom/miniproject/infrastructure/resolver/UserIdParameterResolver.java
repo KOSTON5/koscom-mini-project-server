@@ -18,9 +18,10 @@ public class UserIdParameterResolver implements HandlerMethodArgumentResolver {
     public Mono<Object> resolveArgument(
         MethodParameter parameter,
         BindingContext bindingContext,
-        ServerWebExchange exchange) {
+        ServerWebExchange exchange
+    ) {
 
-        String userId = exchange.getRequest().getHeaders().getFirst("X-USER-ID");
+        Long userId = Long.parseLong(exchange.getRequest().getHeaders().getFirst("X-USER-ID"));
         return Mono.justOrEmpty(userId);
     }
 
