@@ -1,6 +1,7 @@
 package kr.co.koscom.miniproject.common.adapter.out.client.openai;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
 import kr.co.koscom.miniproject.common.application.dto.request.AnalyzeTextRequest;
 import kr.co.koscom.miniproject.common.application.dto.response.AnalyzeTextResponse;
 import kr.co.koscom.miniproject.common.application.port.out.OpenAiClientPort;
@@ -16,6 +17,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class OpenAiAnalyzeTextClient implements OpenAiClientPort<AnalyzeTextRequest, AnalyzeTextResponse> {
 
     private final WebClient webClient;
+    private final ObjectMapper objectMapper;
     private final String OPENAI_BASE_URL = "https://api.openai.com/v1/chat/completions";
     private final String API_KEY = "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";
 
@@ -23,6 +25,7 @@ public class OpenAiAnalyzeTextClient implements OpenAiClientPort<AnalyzeTextRequ
      * Json (포맷) Structure를 사용해서 리팩토링 하자. COT Programming
      */
     private final String PROMPT = "제시되는 문장을 JSON 형식만 변환해서 응답해주세요. 다른 응답 값은 사절입니다.\n"
+        + "오늘 날짜는 " + LocalDate.now() + "이에요.\n"
         + "\n"
         + "예제 문장은 다음과 같아요: \"삼성전자 100주 50000원에 시장가로 매수해줘\"\n"
         + "\n"
@@ -34,6 +37,7 @@ public class OpenAiAnalyzeTextClient implements OpenAiClientPort<AnalyzeTextRequ
         + "  \"quantity\": 100,\n"
         + "  \"price\": 50000,\n"
         + "  \"orderCondition\": \"MARKET\",\n"
+        + "  \"expirationTime\": \"2025-01-02\",\n"
         + "}\n"
         + "\n"
         + "조건:\n"
@@ -59,7 +63,6 @@ public class OpenAiAnalyzeTextClient implements OpenAiClientPort<AnalyzeTextRequ
             .block();
 
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             OpenAiAnalyzeResponse openAiResponse = objectMapper.readValue(response, OpenAiAnalyzeResponse.class);
 
             String jsonContent = openAiResponse.getContent();

@@ -82,6 +82,7 @@ public class OrderApplicationService {
             .orderStatus(OrderStatus.PENDING)
             .price(analyzeTextResponse.price())
             .quantity(analyzeTextResponse.quantity())
+            .expirationTime(analyzeTextResponse.expirationTime())
             .build();
     }
 
@@ -96,6 +97,7 @@ public class OrderApplicationService {
             .orderCondition(analyzeTextResponse.orderCondition())
             .price(analyzeTextResponse.price())
             .quantity(analyzeTextResponse.quantity())
+            .expirationTime(analyzeTextResponse.expirationTime())
             .build();
     }
 
