@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface OrderControllerDocs {
 
     @Operation(summary = "주문 정보를 분석", description = "주문 정보를 LLM 서버에 분석 하고 결과를 반환합니다.")
+    @PostMapping("/analyze")
     ResponseEntity<AnalyzeOrderResponse> analyzeOrder(
         @RequestBody AnalyzeOrderRequest analyzeOrderRequest
     );

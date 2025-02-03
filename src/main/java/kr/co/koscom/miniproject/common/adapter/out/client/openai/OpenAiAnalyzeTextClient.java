@@ -58,8 +58,6 @@ public class OpenAiAnalyzeTextClient implements OpenAiClientPort<AnalyzeTextRequ
             .bodyToMono(String.class)
             .block();
 
-        log.info("OpenAiAnalyzeTextClient response : {}", response);
-
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             OpenAiAnalyzeResponse openAiResponse = objectMapper.readValue(response, OpenAiAnalyzeResponse.class);
