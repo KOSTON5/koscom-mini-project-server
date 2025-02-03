@@ -1,7 +1,7 @@
 package kr.co.koscom.miniproject.stock.infrastructure.exception;
 
-import kr.co.koscom.miniproject.infrastructure.exception.CustomException;
-import kr.co.koscom.miniproject.infrastructure.exception.ErrorCode;
+import kr.co.koscom.miniproject.common.infrastructure.exception.CustomException;
+import kr.co.koscom.miniproject.common.infrastructure.exception.ErrorCode;
 
 public class StockNotFoundException extends CustomException {
 

@@ -1,7 +1,7 @@
 package kr.co.koscom.miniproject.user.infrastructure.exception;
 
-import kr.co.koscom.miniproject.infrastructure.exception.CustomException;
-import kr.co.koscom.miniproject.infrastructure.exception.ErrorCode;
+import kr.co.koscom.miniproject.common.infrastructure.exception.CustomException;
+import kr.co.koscom.miniproject.common.infrastructure.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter

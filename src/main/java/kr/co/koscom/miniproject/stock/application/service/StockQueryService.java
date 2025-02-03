@@ -1,6 +1,6 @@
 package kr.co.koscom.miniproject.stock.application.service;
 
-import kr.co.koscom.miniproject.infrastructure.annotation.ApplicationService;
+import kr.co.koscom.miniproject.common.infrastructure.annotation.ApplicationService;
 import kr.co.koscom.miniproject.stock.adapter.out.jpa.StockJpaRepository;
 import kr.co.koscom.miniproject.stock.application.dto.response.RetrieveStockChartResponse;
 import kr.co.koscom.miniproject.stock.domain.entity.StockEntity;

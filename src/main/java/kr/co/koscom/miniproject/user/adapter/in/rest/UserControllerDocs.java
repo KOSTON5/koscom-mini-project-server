@@ -3,7 +3,7 @@ package kr.co.koscom.miniproject.user.adapter.in.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.co.koscom.miniproject.infrastructure.annotation.CurrentUserId;
+import kr.co.koscom.miniproject.common.infrastructure.annotation.CurrentUserId;
 import kr.co.koscom.miniproject.user.application.dto.request.CreateUserRequest;
 import kr.co.koscom.miniproject.user.application.dto.response.CreateUserResponse;
 import kr.co.koscom.miniproject.user.application.dto.request.DepositUserRequest;
