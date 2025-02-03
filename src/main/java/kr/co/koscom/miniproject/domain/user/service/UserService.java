@@ -1,9 +1,8 @@
 package kr.co.koscom.miniproject.domain.user.service;
 
-import kr.co.koscom.miniproject.adapter.out.jpa.UserJpaRepository;
-import kr.co.koscom.miniproject.domain.user.entity.UserEntity;
+import kr.co.koscom.miniproject.user.domain.entity.UserEntity;
 import kr.co.koscom.miniproject.infrastructure.annotation.DomainService;
-import kr.co.koscom.miniproject.infrastructure.exception.UserBalanceNotEnoughException;
+import kr.co.koscom.miniproject.user.infrastructure.exception.UserBalanceNotEnoughException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

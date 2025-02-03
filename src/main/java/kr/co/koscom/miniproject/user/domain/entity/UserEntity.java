@@ -1,4 +1,4 @@
-package kr.co.koscom.miniproject.domain.user.entity;
+package kr.co.koscom.miniproject.user.domain.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.koscom.miniproject.domain.order.entity.OrderEntity;
+import kr.co.koscom.miniproject.domain.order.vo.OrderStatus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,9 +38,6 @@ public class UserEntity {
     @Column(name = "user_email")
     private String email;
 
-    @Column(name = "user_password")
-    private String password;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<OrderEntity> orders = new ArrayList<>();
 
@@ -53,5 +51,13 @@ public class UserEntity {
 
     public void increaseBalance(final Integer totalPrice) {
         balance = balance + totalPrice;
+    }
+
+    public Integer calculateTotalAssets() {
+        int stockValue = orders.stream()
+            .filter(order -> order.getOrderStatus() == OrderStatus.MATCHED)
+            .mapToInt(order -> order.getPrice() * order.getQuantity())
+            .sum();
+        return stockValue + balance;
     }
 }
