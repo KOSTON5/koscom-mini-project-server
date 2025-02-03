@@ -1,4 +1,4 @@
-package kr.co.koscom.miniproject.domain.stock.entity;
+package kr.co.koscom.miniproject.stock.domain.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -36,6 +36,12 @@ public class StockEntity {
 
     @Column(name = "stock_current_price")
     private Integer currentPrice;
+
+    @Column(name = "stock_trading_volume")
+    private Integer tradingVolume;
+
+    @Column(name = "stock_fluctuation_rate")
+    private Double fluctuationRate;
 
     public void updateCurrentPrice(final Integer realtimeMarketPrice) {
         this.currentPrice = realtimeMarketPrice;

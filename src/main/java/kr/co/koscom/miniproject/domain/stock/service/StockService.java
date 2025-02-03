@@ -1,7 +1,7 @@
 package kr.co.koscom.miniproject.domain.stock.service;
 
-import kr.co.koscom.miniproject.adapter.out.jpa.StockJpaRepository;
-import kr.co.koscom.miniproject.domain.stock.entity.StockEntity;
+import kr.co.koscom.miniproject.stock.adapter.out.jpa.StockJpaRepository;
+import kr.co.koscom.miniproject.stock.domain.entity.StockEntity;
 import kr.co.koscom.miniproject.infrastructure.annotation.DomainService;
 import lombok.RequiredArgsConstructor;
 
