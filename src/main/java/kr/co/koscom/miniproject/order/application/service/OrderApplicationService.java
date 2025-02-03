@@ -4,8 +4,8 @@ import java.util.Optional;
 import kr.co.koscom.miniproject.common.adapter.out.client.naver.clova.NaverClovaSttRequest;
 import kr.co.koscom.miniproject.common.adapter.out.client.naver.clova.NaverClovaSttResponse;
 import kr.co.koscom.miniproject.common.application.dto.request.AnalyzeTextRequest;
+import kr.co.koscom.miniproject.order.application.dto.request.AnalyzeOrderRequest;
 import kr.co.koscom.miniproject.order.application.dto.request.CancelOrderRequest;
-import kr.co.koscom.miniproject.order.application.dto.request.ExecuteMarketOrderRequest;
 import kr.co.koscom.miniproject.order.application.dto.request.ExecuteOrderRequest;
 import kr.co.koscom.miniproject.order.application.dto.response.AnalyzeOrderResponse;
 import kr.co.koscom.miniproject.common.application.dto.response.AnalyzeTextResponse;
@@ -20,11 +20,8 @@ import kr.co.koscom.miniproject.order.domain.vo.OrderCondition;
 import kr.co.koscom.miniproject.order.domain.vo.OrderStatus;
 import kr.co.koscom.miniproject.order.domain.vo.OrderType;
 import kr.co.koscom.miniproject.stock.application.service.StockQueryService;
-import kr.co.koscom.miniproject.stock.domain.entity.StockEntity;
-import kr.co.koscom.miniproject.user.domain.entity.UserEntity;
 import kr.co.koscom.miniproject.user.domain.service.UserService;
 import kr.co.koscom.miniproject.common.infrastructure.annotation.ApplicationService;
-import kr.co.koscom.miniproject.common.infrastructure.exception.NaverClovaSttException;
 import kr.co.koscom.miniproject.common.infrastructure.exception.OpenAiChatException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -35,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @RequiredArgsConstructor
 @ApplicationService
-@Transactional(readOnly = true)
+@Transactional
 public class OrderApplicationService {
 
     private final OpenAiClientPort<AnalyzeTextRequest, AnalyzeTextResponse> openAiClient;
@@ -49,10 +46,9 @@ public class OrderApplicationService {
     private final StockQueryService stockQueryService;
 
     public AnalyzeOrderResponse processLLMOrder(
-        NaverClovaSttRequest naverClovaSttRequest
+        AnalyzeOrderRequest analyzeOrderRequest
     ) {
-        NaverClovaSttResponse naverClovaSttResponse = sendSttRequest(naverClovaSttRequest);
-        AnalyzeTextResponse openAiResponse = analyzeOrderText(naverClovaSttResponse);
+        AnalyzeTextResponse openAiResponse = analyzeOrderText(analyzeOrderRequest);
 
         Long temporalOrderId = orderService.saveOrder(createPendingOrder(openAiResponse));
 
@@ -87,61 +83,17 @@ public class OrderApplicationService {
     }
 
     private AnalyzeTextResponse analyzeOrderText(
-        NaverClovaSttResponse response
+        AnalyzeOrderRequest analyzeOrderRequest
     ) {
-        return Optional.ofNullable(response)
-            .map(NaverClovaSttResponse::text)
+        return Optional.ofNullable(analyzeOrderRequest)
+            .map(AnalyzeOrderRequest::text)
             .map(text -> openAiClient.chat(new AnalyzeTextRequest(text)))
             .orElseThrow(OpenAiChatException::new);
     }
 
-    private NaverClovaSttResponse sendSttRequest(
-        NaverClovaSttRequest request
-    ) {
-        return Optional.ofNullable(naverClovaClient.sendRequest(request))
-            .orElseThrow(NaverClovaSttException::new);
-    }
-
-    @Transactional
-    public Long executeBuyOrder(
-        ExecuteOrderRequest executeOrderRequest
-    ) {
-        OrderEntity order = orderService.findPendingOrder(executeOrderRequest.orderId());
-        UserEntity user = order.getUser();
-        StockEntity stock = stockQueryService.findByTicker(order.getTicker());
-
-        Integer totalPrice = stock.getCurrentPrice() * order.getQuantity();
-
-        userService.decreaseBalance(user, totalPrice);
-        return order.getId();
-    }
-
-
-    @Transactional
-    public Long executeSellOrder(
-        ExecuteOrderRequest executeOrderRequest
-    ) {
-        OrderEntity order = orderService.findPendingOrder(executeOrderRequest.orderId());
-        UserEntity user = order.getUser();
-        StockEntity stock = stockQueryService.findByTicker(order.getTicker());
-
-        Integer totalPrice = stock.getCurrentPrice() * order.getQuantity();
-
-        userService.increaseBalance(user, totalPrice);
-        return order.getId();
-    }
-
-    @Transactional
-    public void cancelOrder(
-        CancelOrderRequest cancelOrderRequest
-    ) {
-        orderService.cancelOrder(cancelOrderRequest.orderId());
-    }
-
-    @Transactional
     public ExecuteOrderResponse executeMarketBuyOrder(
         Long currentUserId,
-        ExecuteMarketOrderRequest executeMarketOrderRequest
+        ExecuteOrderRequest executeMarketOrderRequest
     ) {
         applicationEventPublisher.publishEvent(
             new MarketBuyOrderEvent(this, currentUserId, executeMarketOrderRequest.orderId())
@@ -151,10 +103,9 @@ public class OrderApplicationService {
         return ExecuteOrderResponse.from(order);
     }
 
-    @Transactional
     public ExecuteOrderResponse executeMarketSellOrder(
         Long currentUserId,
-        ExecuteMarketOrderRequest executeMarketOrderRequest
+        ExecuteOrderRequest executeMarketOrderRequest
     ) {
         applicationEventPublisher.publishEvent(
             new MarketSellOrderEvent(this, currentUserId, executeMarketOrderRequest.orderId())
@@ -164,10 +115,9 @@ public class OrderApplicationService {
         return ExecuteOrderResponse.from(order);
     }
 
-    @Transactional
     public ExecuteOrderResponse executeLimitBuyOrder(
         Long currentUserId,
-        ExecuteMarketOrderRequest executeMarketOrderRequest
+        ExecuteOrderRequest executeMarketOrderRequest
     ) {
         applicationEventPublisher.publishEvent(
             new MarketSellOrderEvent(this, currentUserId, executeMarketOrderRequest.orderId())
@@ -177,10 +127,9 @@ public class OrderApplicationService {
         return ExecuteOrderResponse.from(order);
     }
 
-    @Transactional
     public ExecuteOrderResponse executeLimitSellOrder(
         Long currentUserId,
-        ExecuteMarketOrderRequest executeMarketOrderRequest
+        ExecuteOrderRequest executeMarketOrderRequest
     ) {
         applicationEventPublisher.publishEvent(
             new MarketSellOrderEvent(this, currentUserId, executeMarketOrderRequest.orderId())
@@ -189,4 +138,37 @@ public class OrderApplicationService {
         OrderEntity order = orderQueryService.findById(executeMarketOrderRequest.orderId());
         return ExecuteOrderResponse.from(order);
     }
+
+    public void cancelOrder(
+        CancelOrderRequest cancelOrderRequest
+    ) {
+        orderService.cancelOrder(cancelOrderRequest.orderId());
+    }
 }
+
+//    public Long executeBuyOrder(
+//        ExecuteOrderRequest executeOrderRequest
+//    ) {
+//        OrderEntity order = orderService.findPendingOrder(executeOrderRequest.orderId());
+//        UserEntity user = order.getUser();
+//        StockEntity stock = stockQueryService.findByTicker(order.getTicker());
+//
+//        Integer totalPrice = stock.getCurrentPrice() * order.getQuantity();
+//
+//        userService.decreaseBalance(user, totalPrice);
+//        return order.getId();
+//    }
+//
+//
+//    public Long executeSellOrder(
+//        ExecuteOrderRequest executeOrderRequest
+//    ) {
+//        OrderEntity order = orderService.findPendingOrder(executeOrderRequest.orderId());
+//        UserEntity user = order.getUser();
+//        StockEntity stock = stockQueryService.findByTicker(order.getTicker());
+//
+//        Integer totalPrice = stock.getCurrentPrice() * order.getQuantity();
+//
+//        userService.increaseBalance(user, totalPrice);
+//        return order.getId();
+//    }
