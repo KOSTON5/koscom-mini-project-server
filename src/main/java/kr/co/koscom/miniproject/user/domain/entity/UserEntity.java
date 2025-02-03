@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_users")
 public class UserEntity {
 
-    private final int ZERO = 0;
+    private static final int ZERO = 0;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,11 +35,15 @@ public class UserEntity {
     @Column(name = "user_balance")
     private Integer balance;
 
-    @Column(name = "user_email")
-    private String email;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<OrderEntity> orders = new ArrayList<>();
+
+    public static UserEntity initial(String name) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.name = name;
+        userEntity.balance = ZERO;
+        return userEntity;
+    }
 
     public boolean hasNotEnoughBalance(final Integer totalPrice) {
         return balance.compareTo(totalPrice) < ZERO;

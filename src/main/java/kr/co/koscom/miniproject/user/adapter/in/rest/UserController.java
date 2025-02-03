@@ -1,5 +1,7 @@
 package kr.co.koscom.miniproject.user.adapter.in.rest;
 
+import kr.co.koscom.miniproject.user.application.dto.request.CreateUserRequest;
+import kr.co.koscom.miniproject.user.application.dto.response.CreateUserResponse;
 import kr.co.koscom.miniproject.user.application.dto.response.RetrieveUserAssetResponse;
 import kr.co.koscom.miniproject.user.application.service.UserApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -17,5 +19,10 @@ public class UserController implements UserControllerDocs {
     @Override
     public ResponseEntity<RetrieveUserAssetResponse> retrieveUserAsset(Long userId) {
         return ResponseEntity.ok(userApplicationService.retrieveUserAsset(userId));
+    }
+
+    @Override
+    public ResponseEntity<CreateUserResponse> createUser(CreateUserRequest createUserRequest) {
+        return ResponseEntity.ok(userApplicationService.createUser(createUserRequest));
     }
 }
