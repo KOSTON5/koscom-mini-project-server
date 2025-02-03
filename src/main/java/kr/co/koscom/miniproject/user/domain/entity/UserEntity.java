@@ -62,6 +62,7 @@ public class UserEntity {
             .filter(order -> order.getOrderStatus() == OrderStatus.MATCHED)
             .mapToInt(order -> order.getPrice() * order.getQuantity())
             .sum();
+
         return stockValue + balance;
     }
 }

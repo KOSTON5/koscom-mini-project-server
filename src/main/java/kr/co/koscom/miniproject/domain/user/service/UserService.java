@@ -20,4 +20,14 @@ public class UserService {
     public void increaseBalance(UserEntity user, Integer totalPrice) {
         user.increaseBalance(totalPrice);
     }
+
+    public Integer withdraw(UserEntity user, Integer amount) {
+        decreaseBalance(user, amount);
+        return user.getBalance();
+    }
+
+    public Integer deposit(UserEntity user, Integer amount) {
+        increaseBalance(user, amount);
+        return user.getBalance();
+    }
 }

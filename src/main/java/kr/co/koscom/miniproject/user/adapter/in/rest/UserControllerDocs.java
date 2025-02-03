@@ -6,7 +6,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.koscom.miniproject.infrastructure.annotation.CurrentUserId;
 import kr.co.koscom.miniproject.user.application.dto.request.CreateUserRequest;
 import kr.co.koscom.miniproject.user.application.dto.response.CreateUserResponse;
+import kr.co.koscom.miniproject.user.application.dto.request.DepositUserRequest;
+import kr.co.koscom.miniproject.user.application.dto.response.DepositUserResponse;
 import kr.co.koscom.miniproject.user.application.dto.response.RetrieveUserAssetResponse;
+import kr.co.koscom.miniproject.user.application.dto.request.WithdrawUserRequest;
+import kr.co.koscom.miniproject.user.application.dto.response.WithdrawUserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,5 +31,19 @@ public interface UserControllerDocs {
     @PostMapping
     ResponseEntity<CreateUserResponse> createUser(
         @RequestBody CreateUserRequest createUserRequest
+    );
+
+    @Operation(summary = "사용자 출금", description = "사용자 출금 API 입니다.")
+    @PostMapping("/withdraw")
+    ResponseEntity<WithdrawUserResponse> withdraw(
+        @CurrentUserId Long userId,
+        @RequestBody WithdrawUserRequest withdrawUserResponse
+    );
+
+    @Operation(summary = "사용자 입금", description = "사용자 입금 API 입니다.")
+    @PostMapping("/deposit")
+    ResponseEntity<DepositUserResponse> deposit(
+        @CurrentUserId Long userId,
+        @RequestBody DepositUserRequest depositUserResponse
     );
 }
