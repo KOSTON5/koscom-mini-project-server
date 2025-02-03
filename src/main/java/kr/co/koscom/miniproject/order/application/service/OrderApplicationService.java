@@ -1,13 +1,8 @@
 package kr.co.koscom.miniproject.order.application.service;
 
 import java.util.Optional;
-import kr.co.koscom.miniproject.common.adapter.out.client.naver.clova.NaverClovaSttRequest;
-import kr.co.koscom.miniproject.common.adapter.out.client.naver.clova.NaverClovaSttResponse;
-import kr.co.koscom.miniproject.common.adapter.out.client.naver.stock.NaverStockPriceResponse;
-import kr.co.koscom.miniproject.common.adapter.out.client.openai.OpenAiAnalyzeResponse;
 import kr.co.koscom.miniproject.common.application.dto.request.AnalyzeTextRequest;
 import kr.co.koscom.miniproject.common.application.dto.response.AnalyzeTextResponse;
-import kr.co.koscom.miniproject.common.application.port.out.NaverClovaClientPort;
 import kr.co.koscom.miniproject.common.application.port.out.NaverStockClientPort;
 import kr.co.koscom.miniproject.common.application.port.out.OpenAiClientPort;
 import kr.co.koscom.miniproject.common.infrastructure.annotation.ApplicationService;
@@ -51,7 +46,7 @@ public class OrderApplicationService {
         AnalyzeTextResponse analyzeTextResponse = analyzeOrderText(analyzeOrderRequest);
         analyzeTextResponse = updatePrice(analyzeTextResponse);
 
-        Long temporalOrderId = orderService.saveOrder(createPendingOrder(analyzeTextResponse));
+        Long temporalOrderId = orderService.save(createPendingOrder(analyzeTextResponse));
 
         return buildAnalyzeOrderResponse(analyzeTextResponse, temporalOrderId);
     }
@@ -69,7 +64,7 @@ public class OrderApplicationService {
     }
 
     public int addRealtimePrice(String ticker) {
-        return naverStockClient.getStockPrice(ticker).getFirstStockData().openingPrice();
+        return naverStockClient.scrapStock(ticker).getFirstStockData().openingPrice();
     }
 
     private OrderEntity createPendingOrder(
@@ -93,6 +88,7 @@ public class OrderApplicationService {
         return AnalyzeOrderResponse.builder()
             .orderId(orderId)
             .ticker(analyzeTextResponse.ticker())
+            .stockName(analyzeTextResponse.stockName())
             .orderType(analyzeTextResponse.orderType())
             .orderCondition(analyzeTextResponse.orderCondition())
             .price(analyzeTextResponse.price())

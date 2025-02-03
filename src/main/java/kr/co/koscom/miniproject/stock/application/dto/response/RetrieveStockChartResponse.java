@@ -24,7 +24,7 @@ public record RetrieveStockChartResponse(
     record StockComponent(
         String stockName,
         Integer currentPrice,
-        Integer tradingVolume,
+        Long tradingVolume,
         Double fluctuationRate
     ) {
 

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Tag(name = "User API", description = "사용자 정보를 제공하는 API 명세서입니다.")
@@ -24,7 +25,7 @@ public interface UserControllerDocs {
     @Operation(summary = "사용자 정보 조회", description = "사용자 정보를 조회하는 API 입니다.")
     @GetMapping("/information")
     ResponseEntity<RetrieveUserAssetResponse> retrieveUserAsset(
-        @CurrentUserId Long userId
+        @RequestHeader(name = "X-USER-ID") Long userId
     );
 
     @Operation(summary = "사용자 생성", description = "사용자를 생성하는 API 입니다.")
@@ -36,14 +37,14 @@ public interface UserControllerDocs {
     @Operation(summary = "사용자 출금", description = "사용자 출금 API 입니다.")
     @PostMapping("/withdraw")
     ResponseEntity<WithdrawUserResponse> withdraw(
-        @CurrentUserId Long userId,
+        @RequestHeader(name = "X-USER-ID") Long userId,
         @RequestBody WithdrawUserRequest withdrawUserResponse
     );
 
     @Operation(summary = "사용자 입금", description = "사용자 입금 API 입니다.")
     @PostMapping("/deposit")
     ResponseEntity<DepositUserResponse> deposit(
-        @CurrentUserId Long userId,
+        @RequestHeader(name = "X-USER-ID") Long userId,
         @RequestBody DepositUserRequest depositUserResponse
     );
 }

@@ -6,17 +6,22 @@ import kr.co.koscom.miniproject.order.domain.vo.OrderStatus;
 import kr.co.koscom.miniproject.common.infrastructure.annotation.DomainService;
 import kr.co.koscom.miniproject.common.infrastructure.exception.OrderNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @DomainService
+@Transactional(readOnly = true)
 public class OrderService {
 
     private final OrderJpaRepository orderJpaRepository;
 
-    public Long saveOrder(OrderEntity orderEntity) {
+    public Long save(OrderEntity orderEntity) {
         return orderJpaRepository.save(orderEntity).getId();
     }
 
+    @Transactional
     public void cancelOrder(Long orderId) {
         orderJpaRepository.findById(orderId)
             .filter(orderEntity -> orderEntity.getOrderStatus() == OrderStatus.PENDING)
@@ -32,7 +37,12 @@ public class OrderService {
         order.changeOrderStatus(orderStatus);
     }
 
+    @Transactional
     public void executeOrder(OrderEntity order) {
+        log.info("OrderService : executeOrder() Start");
         order.match();
+
+        log.info("OrderService : executeOrder() : OrderStatus {}", order.getOrderStatus());
+        log.info("OrderService : executeOrder() : executionTime {}", order.getExecutionTime());
     }
 }

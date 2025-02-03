@@ -1,5 +1,6 @@
 package kr.co.koscom.miniproject.order.adapter.in.event;
 
+import kr.co.koscom.miniproject.order.application.event.LimitSellOrderEvent;
 import kr.co.koscom.miniproject.order.application.event.MarketBuyOrderEvent;
 import kr.co.koscom.miniproject.order.application.service.OrderExecutionService;
 import kr.co.koscom.miniproject.order.application.service.OrderQueryService;
@@ -20,7 +21,7 @@ public class LimitSellOrderListener {
     private final StockApplicationService stockApplicationService;
 
     @TransactionalEventListener
-    public void handleLimitSellOrder(MarketBuyOrderEvent event) {
+    public void handleLimitSellOrder(LimitSellOrderEvent event) {
         log.info("Processing Limit Sell Order for Order ID: {}", event.getOrderId());
 
         OrderEntity order = orderQueryService.findById(event.getOrderId());

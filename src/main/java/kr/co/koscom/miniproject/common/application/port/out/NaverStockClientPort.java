@@ -1,7 +1,9 @@
 package kr.co.koscom.miniproject.common.application.port.out;
 
-import kr.co.koscom.miniproject.common.adapter.out.client.naver.stock.NaverStockPriceResponse;
+import kr.co.koscom.miniproject.common.adapter.out.client.naver.stock.NaverStockResponse;
 
 public interface NaverStockClientPort {
-    NaverStockPriceResponse getStockPrice(String ticker);
+    NaverStockResponse scrapStock(String ticker);
+
+
 }

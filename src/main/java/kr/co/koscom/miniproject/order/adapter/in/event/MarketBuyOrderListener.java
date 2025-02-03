@@ -19,19 +19,16 @@ public class MarketBuyOrderListener {
     private final OrderQueryService orderQueryService;
     private final OrderExecutionService orderExecutionService;
     private final StockApplicationService stockApplicationService;
+    public static int repeatCount = 0;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    public void handleBeforeCommit(MarketBuyOrderEvent event) {
-        log.info("BEFORE_COMMIT: Updating Order Price for Order ID: {}", event.getOrderId());
+    public void handleMarketBuyOrder(MarketBuyOrderEvent event) {
+        log.info("📌 MarketBuyOrderEvent 발생 {} ", repeatCount++);
 
         OrderEntity order = orderQueryService.findById(event.getOrderId());
         Integer realtimeMarketPrice = stockApplicationService.updateMarketPrice(order.getTicker());
-
         order.updatePrice(realtimeMarketPrice);
-    }
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handleAfterCommit(MarketBuyOrderEvent event) {
         log.info("AFTER_COMMIT: Executing Market Buy Order for Order ID: {}", event.getOrderId());
 
         orderExecutionService.executeMarketBuyOrder(event.getUserId(), event.getOrderId());

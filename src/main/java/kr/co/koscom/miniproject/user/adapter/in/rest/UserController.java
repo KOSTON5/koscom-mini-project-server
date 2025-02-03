@@ -21,23 +21,35 @@ public class UserController implements UserControllerDocs {
     private final UserApplicationService userApplicationService;
 
     @Override
-    public ResponseEntity<RetrieveUserAssetResponse> retrieveUserAsset(Long userId) {
+    public ResponseEntity<RetrieveUserAssetResponse> retrieveUserAsset(
+        Long userId
+    ) {
         return ResponseEntity.ok(userApplicationService.retrieveUserAsset(userId));
     }
 
     @Override
-    public ResponseEntity<CreateUserResponse> createUser(CreateUserRequest createUserRequest) {
+    public ResponseEntity<CreateUserResponse> createUser(
+        CreateUserRequest createUserRequest
+    ) {
+        log.info("UserController : createUser request: {}", createUserRequest);
         return ResponseEntity.ok(userApplicationService.createUser(createUserRequest));
     }
 
     @Override
-    public ResponseEntity<WithdrawUserResponse> withdraw(Long userId, WithdrawUserRequest withdrawUserRequest) {
+    public ResponseEntity<WithdrawUserResponse> withdraw(
+        Long userId,
+        WithdrawUserRequest withdrawUserRequest
+    ) {
+        log.info("UserController : withdraw request: {} by userId : {}", withdrawUserRequest, userId);
         return ResponseEntity.ok(userApplicationService.withdraw(userId, withdrawUserRequest));
     }
 
-    @Override
-    public ResponseEntity<DepositUserResponse> deposit(Long userId, DepositUserRequest depositUserRequest) {
 
+    @Override
+    public ResponseEntity<DepositUserResponse> deposit(
+        Long userId,
+        DepositUserRequest depositUserRequest
+    ) {
         return ResponseEntity.ok(userApplicationService.deposit(userId, depositUserRequest));
     }
 }

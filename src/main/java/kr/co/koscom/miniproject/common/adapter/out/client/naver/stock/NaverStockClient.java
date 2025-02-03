@@ -14,7 +14,7 @@ public class NaverStockClient implements NaverStockClientPort {
     private final ObjectMapper objectMapper;
     private static final String NAVER_FINANCE_URL = "https://polling.finance.naver.com/api/realtime?query=SERVICE_ITEM:";
 
-    public NaverStockPriceResponse getStockPrice(String ticker) {
+    public NaverStockResponse scrapStock(String ticker) {
         return webClient.get()
             .uri(NAVER_FINANCE_URL + ticker)
             .retrieve()
@@ -23,13 +23,11 @@ public class NaverStockClient implements NaverStockClientPort {
             .block();
     }
 
-    private NaverStockPriceResponse parseResponse(String response) {
+    private NaverStockResponse parseResponse(String response) {
         try {
-            return objectMapper.readValue(response, NaverStockPriceResponse.class);
-        } catch (Exception e) {
-            throw new RuntimeException("JSON Parsing Error", e);
+            return objectMapper.readValue(response, NaverStockResponse.class);
+        } catch (Exception exception) {
+            throw new RuntimeException("JSON Parsing Error", exception);
         }
     }
-
-
 }

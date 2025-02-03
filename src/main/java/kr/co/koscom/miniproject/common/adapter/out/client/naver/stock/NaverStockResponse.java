@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record NaverStockPriceResponse(
+public record NaverStockResponse(
     @JsonProperty("resultCode") String resultCode,
     @JsonProperty("result") Result result
 ) {

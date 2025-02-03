@@ -7,13 +7,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "tb_stock")
+@Builder(toBuilder = true)
 public class StockEntity {
 
     @Id
@@ -31,7 +35,7 @@ public class StockEntity {
     private Integer currentPrice;
 
     @Column(name = "stock_trading_volume")
-    private Integer tradingVolume;
+    private Long tradingVolume;
 
     @Column(name = "stock_fluctuation_rate")
     private Double fluctuationRate;
