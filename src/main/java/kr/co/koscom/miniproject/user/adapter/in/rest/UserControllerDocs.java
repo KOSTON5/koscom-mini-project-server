@@ -3,13 +3,13 @@ package kr.co.koscom.miniproject.user.adapter.in.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.co.koscom.miniproject.common.infrastructure.annotation.CurrentUserId;
 import kr.co.koscom.miniproject.user.application.dto.request.CreateUserRequest;
-import kr.co.koscom.miniproject.user.application.dto.response.CreateUserResponse;
 import kr.co.koscom.miniproject.user.application.dto.request.DepositUserRequest;
+import kr.co.koscom.miniproject.user.application.dto.request.WithdrawUserRequest;
+import kr.co.koscom.miniproject.user.application.dto.response.CreateUserResponse;
 import kr.co.koscom.miniproject.user.application.dto.response.DepositUserResponse;
 import kr.co.koscom.miniproject.user.application.dto.response.RetrieveUserAssetResponse;
-import kr.co.koscom.miniproject.user.application.dto.request.WithdrawUserRequest;
+import kr.co.koscom.miniproject.user.application.dto.response.RetrieveUserOrdersResponse;
 import kr.co.koscom.miniproject.user.application.dto.response.WithdrawUserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +25,12 @@ public interface UserControllerDocs {
     @Operation(summary = "사용자 정보 조회", description = "사용자 정보를 조회하는 API 입니다.")
     @GetMapping("/information")
     ResponseEntity<RetrieveUserAssetResponse> retrieveUserAsset(
+        @RequestHeader(name = "X-USER-ID") Long userId
+    );
+
+    @Operation(summary = "사용자 주문 정보 조회", description = "사용자 주문 정보를 조회하는 API 입니다.")
+    @GetMapping("/orders")
+    ResponseEntity<RetrieveUserOrdersResponse> retrieveUserOrders(
         @RequestHeader(name = "X-USER-ID") Long userId
     );
 

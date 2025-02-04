@@ -1,5 +1,7 @@
 package kr.co.koscom.miniproject.user.application.service;
 
+import java.util.List;
+import kr.co.koscom.miniproject.order.domain.entity.OrderEntity;
 import kr.co.koscom.miniproject.user.adapter.out.jpa.UserJpaRepository;
 import kr.co.koscom.miniproject.user.domain.entity.UserEntity;
 import kr.co.koscom.miniproject.common.infrastructure.annotation.ApplicationService;
@@ -22,5 +24,11 @@ public class UserQueryService {
     @Transactional
     public Long save(UserEntity user) {
         return userJpaRepository.save(user).getId();
+    }
+
+    public List<OrderEntity> findOrdersByUserId(Long userId) {
+        return userJpaRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException())
+            .getOrders();
     }
 }

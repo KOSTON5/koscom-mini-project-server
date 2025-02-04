@@ -26,7 +26,7 @@ public interface OpenAiControllerDocs {
     @Operation(summary = "Speech To Text", description = "음성을 텍스트로 변환하는 API 입니다.")
     @PostMapping("/stt")
     ResponseEntity<SpeechToTextResponse> speechToText(
-        @RequestPart("audioFile")MultipartFile audioFile
+        @RequestPart("audioFile") MultipartFile audioFile
     );
 
 }

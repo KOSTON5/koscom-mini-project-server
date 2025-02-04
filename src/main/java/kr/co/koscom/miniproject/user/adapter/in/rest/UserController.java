@@ -6,6 +6,7 @@ import kr.co.koscom.miniproject.user.application.dto.request.DepositUserRequest;
 import kr.co.koscom.miniproject.user.application.dto.response.DepositUserResponse;
 import kr.co.koscom.miniproject.user.application.dto.response.RetrieveUserAssetResponse;
 import kr.co.koscom.miniproject.user.application.dto.request.WithdrawUserRequest;
+import kr.co.koscom.miniproject.user.application.dto.response.RetrieveUserOrdersResponse;
 import kr.co.koscom.miniproject.user.application.dto.response.WithdrawUserResponse;
 import kr.co.koscom.miniproject.user.application.service.UserApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +23,21 @@ public class UserController implements UserControllerDocs {
 
     @Override
     public ResponseEntity<RetrieveUserAssetResponse> retrieveUserAsset(
-        Long userId
+        final Long userId
     ) {
         return ResponseEntity.ok(userApplicationService.retrieveUserAsset(userId));
     }
 
     @Override
+    public ResponseEntity<RetrieveUserOrdersResponse> retrieveUserOrders(
+        final Long userId
+    ) {
+        return ResponseEntity.ok(userApplicationService.retrieveUserOrders(userId));
+    }
+
+    @Override
     public ResponseEntity<CreateUserResponse> createUser(
-        CreateUserRequest createUserRequest
+        final CreateUserRequest createUserRequest
     ) {
         log.info("UserController : createUser request: {}", createUserRequest);
         return ResponseEntity.ok(userApplicationService.createUser(createUserRequest));
@@ -37,8 +45,8 @@ public class UserController implements UserControllerDocs {
 
     @Override
     public ResponseEntity<WithdrawUserResponse> withdraw(
-        Long userId,
-        WithdrawUserRequest withdrawUserRequest
+        final Long userId,
+        final WithdrawUserRequest withdrawUserRequest
     ) {
         log.info("UserController : withdraw request: {} by userId : {}", withdrawUserRequest, userId);
         return ResponseEntity.ok(userApplicationService.withdraw(userId, withdrawUserRequest));
@@ -47,8 +55,8 @@ public class UserController implements UserControllerDocs {
 
     @Override
     public ResponseEntity<DepositUserResponse> deposit(
-        Long userId,
-        DepositUserRequest depositUserRequest
+        final Long userId,
+        final DepositUserRequest depositUserRequest
     ) {
         return ResponseEntity.ok(userApplicationService.deposit(userId, depositUserRequest));
     }

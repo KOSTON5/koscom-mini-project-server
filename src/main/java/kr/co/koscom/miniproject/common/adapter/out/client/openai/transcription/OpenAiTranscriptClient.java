@@ -1,4 +1,4 @@
-package kr.co.koscom.miniproject.common.adapter.out.client.openai;
+package kr.co.koscom.miniproject.common.adapter.out.client.openai.transcription;
 
 import java.io.IOException;
 import kr.co.koscom.miniproject.common.application.port.out.OpenAiClientPort;

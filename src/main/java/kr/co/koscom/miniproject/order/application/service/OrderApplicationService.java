@@ -74,6 +74,7 @@ public class OrderApplicationService {
     ) {
         return OrderEntity.builder()
             .ticker(analyzeTextResponse.ticker())
+            .stockName(analyzeTextResponse.stockName())
             .orderType(CommandType.from(analyzeTextResponse.commandType()))
             .orderCondition(OrderCondition.from(analyzeTextResponse.orderCondition()))
             .orderStatus(OrderStatus.PENDING)

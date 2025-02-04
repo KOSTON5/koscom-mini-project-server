@@ -37,8 +37,11 @@ public class OrderEntity {
     @Column(name = "order_id")
     private Long id;
 
-    @Column(name = "order_ticker")
+    @Column(name = "order_stock_ticker")
     private String ticker;
+
+    @Column(name = "order_stock_name")
+    private String stockName;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_type")

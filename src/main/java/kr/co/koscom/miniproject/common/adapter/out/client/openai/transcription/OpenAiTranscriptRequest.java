@@ -1,4 +1,4 @@
-package kr.co.koscom.miniproject.common.adapter.out.client.openai;
+package kr.co.koscom.miniproject.common.adapter.out.client.openai.transcription;
 
 import lombok.Builder;
 

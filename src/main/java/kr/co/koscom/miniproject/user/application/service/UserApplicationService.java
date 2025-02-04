@@ -1,5 +1,8 @@
 package kr.co.koscom.miniproject.user.application.service;
 
+import java.util.List;
+import kr.co.koscom.miniproject.order.domain.entity.OrderEntity;
+import kr.co.koscom.miniproject.user.application.dto.response.RetrieveUserOrdersResponse;
 import kr.co.koscom.miniproject.user.domain.service.UserService;
 import kr.co.koscom.miniproject.common.infrastructure.annotation.ApplicationService;
 import kr.co.koscom.miniproject.user.application.dto.request.CreateUserRequest;
@@ -34,24 +37,37 @@ public class UserApplicationService {
         );
     }
 
+    public RetrieveUserOrdersResponse retrieveUserOrders(Long userId) {
+        log.info("UserApplicationService : retrieveUserOrders(): userId={}", userId);
+        List<OrderEntity> orders = userQueryService.findOrdersByUserId(userId);
+
+        return RetrieveUserOrdersResponse.from(orders);
+    }
+
     public CreateUserResponse createUser(CreateUserRequest createUserRequest) {
+        log.info("UserApplicationService : createUser(): createUserRequest={}", createUserRequest);
         Long savedId = userQueryService.save(UserEntity.initial(createUserRequest.name()));
+
         return CreateUserResponse.from(savedId);
     }
 
     @Transactional
     public WithdrawUserResponse withdraw(Long userId, WithdrawUserRequest withdrawUserResponse) {
+        log.info("UserApplicationService : withdraw(): userId={}, withdrawUserResponse={}", userId, withdrawUserResponse);
         UserEntity user = userQueryService.findById(userId);
 
         return new WithdrawUserResponse(
             userId,
             userService.withdraw(user, withdrawUserResponse.amount()
-            ));
+            )
+        );
     }
 
     @Transactional
     public DepositUserResponse deposit(Long userId, DepositUserRequest depositUserResponse) {
+        log.info("UserApplicationService : deposit(): userId={}, depositUserResponse={}", userId, depositUserResponse);
         UserEntity user = userQueryService.findById(userId);
+
         return new DepositUserResponse(
             userId,
             userService.deposit(user, depositUserResponse.amount())
