@@ -1,7 +1,7 @@
 package kr.co.koscom.miniproject.order.application.service;
 
 import java.util.Optional;
-import kr.co.koscom.miniproject.common.application.dto.request.AnalyzeTextRequest;
+import kr.co.koscom.miniproject.common.application.dto.request.AnalyzeCommandRequest;
 import kr.co.koscom.miniproject.common.application.dto.response.AnalyzeTextResponse;
 import kr.co.koscom.miniproject.common.application.port.out.NaverStockClientPort;
 import kr.co.koscom.miniproject.common.application.port.out.OpenAiClientPort;
@@ -16,9 +16,9 @@ import kr.co.koscom.miniproject.order.application.event.MarketBuyOrderEvent;
 import kr.co.koscom.miniproject.order.application.event.MarketSellOrderEvent;
 import kr.co.koscom.miniproject.order.domain.entity.OrderEntity;
 import kr.co.koscom.miniproject.order.domain.service.OrderService;
+import kr.co.koscom.miniproject.order.domain.vo.CommandType;
 import kr.co.koscom.miniproject.order.domain.vo.OrderCondition;
 import kr.co.koscom.miniproject.order.domain.vo.OrderStatus;
-import kr.co.koscom.miniproject.order.domain.vo.OrderType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class OrderApplicationService {
 
-    private final OpenAiClientPort<AnalyzeTextRequest, AnalyzeTextResponse> openAiClient;
+    private final OpenAiClientPort<AnalyzeCommandRequest, AnalyzeTextResponse> openAiClient;
     private final NaverStockClientPort naverStockClient;
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -44,6 +44,8 @@ public class OrderApplicationService {
         AnalyzeOrderRequest analyzeOrderRequest
     ) {
         AnalyzeTextResponse analyzeTextResponse = analyzeOrderText(analyzeOrderRequest);
+        CommandType commandType = CommandType.from(analyzeTextResponse.commandType());
+
         analyzeTextResponse = updatePrice(analyzeTextResponse);
 
         Long temporalOrderId = orderService.save(createPendingOrder(analyzeTextResponse));
@@ -51,16 +53,16 @@ public class OrderApplicationService {
         return buildAnalyzeOrderResponse(analyzeTextResponse, temporalOrderId);
     }
 
-    private AnalyzeTextResponse updatePrice(AnalyzeTextResponse openAiResponse) {
-        log.info("updatePrice: {}", openAiResponse);
+    private AnalyzeTextResponse updatePrice(AnalyzeTextResponse analyzeTextResponse) {
+        log.info("OrderApplicationService : updatePrice() : analyzeTextResponse {}", analyzeTextResponse);
 
-        if(openAiResponse.isPriceEmpty()) {
-            return openAiResponse.toBuilder()
-                .price(addRealtimePrice(openAiResponse.ticker()))
+        if(analyzeTextResponse.isPriceEmpty()) {
+            return analyzeTextResponse.toBuilder()
+                .price(addRealtimePrice(analyzeTextResponse.ticker()))
                 .build();
         }
 
-        return openAiResponse;
+        return analyzeTextResponse;
     }
 
     public int addRealtimePrice(String ticker) {
@@ -72,7 +74,7 @@ public class OrderApplicationService {
     ) {
         return OrderEntity.builder()
             .ticker(analyzeTextResponse.ticker())
-            .orderType(OrderType.from(analyzeTextResponse.orderType()))
+            .orderType(CommandType.from(analyzeTextResponse.commandType()))
             .orderCondition(OrderCondition.from(analyzeTextResponse.orderCondition()))
             .orderStatus(OrderStatus.PENDING)
             .price(analyzeTextResponse.price())
@@ -89,7 +91,7 @@ public class OrderApplicationService {
             .orderId(orderId)
             .ticker(analyzeTextResponse.ticker())
             .stockName(analyzeTextResponse.stockName())
-            .orderType(analyzeTextResponse.orderType())
+            .orderType(analyzeTextResponse.commandType())
             .orderCondition(analyzeTextResponse.orderCondition())
             .price(analyzeTextResponse.price())
             .quantity(analyzeTextResponse.quantity())
@@ -102,7 +104,7 @@ public class OrderApplicationService {
     ) {
         return Optional.ofNullable(analyzeOrderRequest)
             .map(AnalyzeOrderRequest::text)
-            .map(text -> openAiClient.chat(new AnalyzeTextRequest(text)))
+            .map(text -> openAiClient.chat(new AnalyzeCommandRequest(text)))
             .orElseThrow(OpenAiChatException::new);
     }
 

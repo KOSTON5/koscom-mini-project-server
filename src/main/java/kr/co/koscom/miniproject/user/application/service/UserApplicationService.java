@@ -24,8 +24,13 @@ public class UserApplicationService {
     private final UserService userService;
 
     public RetrieveUserAssetResponse retrieveUserAsset(final Long userId) {
-        return RetrieveUserAssetResponse.from(
-            userQueryService.findById(userId)
+        log.info("UserApplicationService : retrieveUserAsset(): userId={}", userId);
+        UserEntity user = userQueryService.findById(userId);
+
+        log.info("UserApplicationService : retrieveUserAsset(): user.orders={}", user.getOrders().size());
+        return RetrieveUserAssetResponse.of(
+            user.calculateTotalAssets(),
+            user.getBalance()
         );
     }
 
@@ -41,7 +46,7 @@ public class UserApplicationService {
         return new WithdrawUserResponse(
             userId,
             userService.withdraw(user, withdrawUserResponse.amount()
-        ));
+            ));
     }
 
     @Transactional

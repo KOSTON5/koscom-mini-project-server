@@ -1,7 +1,7 @@
 package kr.co.koscom.miniproject.common.application.dto.request;
 
-public record AnalyzeTextRequest(
-    String text
+public record AnalyzeCommandRequest(
+    String command
 ) {
 
 }

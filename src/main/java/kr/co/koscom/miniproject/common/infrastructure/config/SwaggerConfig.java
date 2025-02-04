@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
     ),
     servers = {
         @Server(url = "http://localhost:8080/", description = "로컬 서버 URL"),
+        @Server(url = "http://kcloud_cst03-2574401.devtools.fin-ncloud.com/", description = "원격 서버 URL"),
     },
     security = @SecurityRequirement(name = "Authorization")
 )

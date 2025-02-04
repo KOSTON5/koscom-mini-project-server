@@ -13,8 +13,19 @@ public record OpenAiAnalyzeTextRequest(
 ) {
 
     private OpenAiAnalyzeTextRequest(final String text) {
-        this("gpt-4o-mini",
-            List.of(Map.of("role", "user", "content", text)),
+        this(
+            "gpt-4o-mini",
+            List.of(
+	Map.of(
+	    "role", "system",
+	    "content",
+	    "You are a specialized AI assistant designed to output plain JSON. "
+	),
+	Map.of(
+	    "role", "user",
+	    "content", text
+	)
+            ),
             0.7
         );
     }

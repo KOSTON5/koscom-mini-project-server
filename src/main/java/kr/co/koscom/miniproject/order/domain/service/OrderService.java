@@ -38,11 +38,12 @@ public class OrderService {
     }
 
     @Transactional
-    public void executeOrder(OrderEntity order) {
+    public OrderEntity executeOrder(OrderEntity order) {
         log.info("OrderService : executeOrder() Start");
         order.match();
 
         log.info("OrderService : executeOrder() : OrderStatus {}", order.getOrderStatus());
         log.info("OrderService : executeOrder() : executionTime {}", order.getExecutionTime());
+        return order;
     }
 }

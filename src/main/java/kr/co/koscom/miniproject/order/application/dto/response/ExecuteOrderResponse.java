@@ -3,9 +3,9 @@ package kr.co.koscom.miniproject.order.application.dto.response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import kr.co.koscom.miniproject.order.domain.entity.OrderEntity;
+import kr.co.koscom.miniproject.order.domain.vo.CommandType;
 import kr.co.koscom.miniproject.order.domain.vo.OrderCondition;
 import kr.co.koscom.miniproject.order.domain.vo.OrderStatus;
-import kr.co.koscom.miniproject.order.domain.vo.OrderType;
 
 /**
  * description : 주문 실행 응답
@@ -23,7 +23,7 @@ import kr.co.koscom.miniproject.order.domain.vo.OrderType;
  */
 public record ExecuteOrderResponse(
     Long orderId, String ticker,
-    OrderType orderType, OrderCondition orderCondition, OrderStatus orderStatus,
+    CommandType orderType, OrderCondition orderCondition, OrderStatus orderStatus,
     Integer executedPrice, Integer executedQuantity, Integer totalAmount,
     LocalDateTime executionTime, LocalDate expirationTime
 ) {

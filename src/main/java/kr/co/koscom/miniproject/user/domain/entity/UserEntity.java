@@ -3,6 +3,7 @@ package kr.co.koscom.miniproject.user.domain.entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,7 +36,7 @@ public class UserEntity {
     @Column(name = "user_balance")
     private Integer balance;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public List<OrderEntity> orders = new ArrayList<>();
 
     public static UserEntity initial(String name) {
@@ -64,5 +65,10 @@ public class UserEntity {
             .sum();
 
         return stockValue + balance;
+    }
+
+    public void addOrder(OrderEntity order) {
+        order.setUser(this);
+        orders.add(order);
     }
 }

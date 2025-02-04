@@ -34,7 +34,8 @@ public class OrderExecutionService {
         UserEntity user = userQueryService.findById(userId);
 
         Integer totalPrice = order.getPrice() * order.getQuantity();
-        log.info("Current Balance : {} \n, Total Market Buy Price: {}", user.getBalance(), totalPrice);
+        log.info("Current Balance : {} \n, Total Market Buy Price: {}", user.getBalance(),
+            totalPrice);
 
         try {
             userService.decreaseBalance(user, totalPrice);
@@ -44,8 +45,9 @@ public class OrderExecutionService {
         }
 
         log.info("Market Buy Order Executed Successfully, After Balance: {}", user.getBalance());
-        orderService.executeOrder(order);
-
+        OrderEntity updatedOrder = orderService.executeOrder(order);
+        user.addOrder(updatedOrder);
+        userQueryService.save(user);
     }
 
     public void executeMarketSellOrder(Long userId, Long orderId) {
@@ -55,8 +57,7 @@ public class OrderExecutionService {
         UserEntity user = userQueryService.findById(userId);
 
         Integer totalPrice = order.getPrice() * order.getQuantity();
-        log.info("Current Balance : {} \n, Total Market Sell Price: {}", user.getBalance(),
-            totalPrice);
+        log.info("Current Balance : {} \n, Total Market Sell Price: {}", user.getBalance(), totalPrice);
 
         try {
             userService.increaseBalance(user, totalPrice);
@@ -66,6 +67,8 @@ public class OrderExecutionService {
         }
         log.info("Market Sell Order Executed Successfully, After Balance: {}", user.getBalance());
 
-        orderService.executeOrder(order);
+        OrderEntity updatedOrder = orderService.executeOrder(order);
+        user.addOrder(updatedOrder);
+        userQueryService.save(user);
     }
 }

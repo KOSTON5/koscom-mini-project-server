@@ -14,14 +14,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import kr.co.koscom.miniproject.order.domain.vo.OrderCondition;
 import kr.co.koscom.miniproject.order.domain.vo.OrderStatus;
-import kr.co.koscom.miniproject.order.domain.vo.OrderType;
+import kr.co.koscom.miniproject.order.domain.vo.CommandType;
 import kr.co.koscom.miniproject.user.domain.entity.UserEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -40,7 +42,7 @@ public class OrderEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_type")
-    private OrderType orderType;
+    private CommandType orderType;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_condition")

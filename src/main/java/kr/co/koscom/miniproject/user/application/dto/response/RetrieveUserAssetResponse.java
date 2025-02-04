@@ -8,10 +8,11 @@ public record RetrieveUserAssetResponse(
     Double profitRate
 ) {
 
-    public static RetrieveUserAssetResponse from(final UserEntity userEntity) {
+    public static RetrieveUserAssetResponse of(final Integer totalAssets,
+        final Integer availableBalance) {
         return new RetrieveUserAssetResponse(
-            userEntity.calculateTotalAssets(),
-            userEntity.getBalance(),
+            totalAssets,
+            availableBalance,
             2.45
         );
     }
