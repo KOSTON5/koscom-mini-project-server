@@ -39,7 +39,7 @@ public class UserApplicationService {
 
     public RetrieveUserOrdersResponse retrieveUserOrders(Long userId) {
         log.info("UserApplicationService : retrieveUserOrders(): userId={}", userId);
-        List<OrderEntity> orders = userQueryService.findOrdersByUserId(userId);
+        List<OrderEntity> orders = userQueryService.findOrdersByUserIdExecutionTimeDesc(userId);
 
         return RetrieveUserOrdersResponse.from(orders);
     }

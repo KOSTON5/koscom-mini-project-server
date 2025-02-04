@@ -48,9 +48,6 @@ public class OrderExecutionService {
         OrderEntity updatedOrder = orderService.executeOrder(order);
         user.addOrder(updatedOrder);
         userQueryService.save(user);
-
-//        UserEntity newUser = userQueryService.findById(userId);
-//        log.info("User's Orders: {}", newUser.getOrders());
     }
 
     public void executeMarketSellOrder(Long userId, Long orderId) {

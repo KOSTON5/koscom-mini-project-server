@@ -26,9 +26,13 @@ public class UserQueryService {
         return userJpaRepository.save(user).getId();
     }
 
-    public List<OrderEntity> findOrdersByUserId(Long userId) {
+    public List<OrderEntity> findOrdersByUserIdExecutionTimeDesc(Long userId) {
         return userJpaRepository.findById(userId)
             .orElseThrow(() -> new UserNotFoundException())
-            .getOrders();
+            .getOrders()
+            .stream().sorted(
+	(o1, o2) -> o2.getExecutionTime().compareTo(o1.getExecutionTime())
+            )
+            .toList();
     }
 }
