@@ -1,7 +1,7 @@
 package kr.co.koscom.miniproject.order.adapter.in.event;
 
 import kr.co.koscom.miniproject.order.application.event.LimitSellOrderEvent;
-import kr.co.koscom.miniproject.order.application.event.MarketBuyOrderEvent;
+import kr.co.koscom.miniproject.order.application.service.OrderApplicationService;
 import kr.co.koscom.miniproject.order.application.service.OrderExecutionService;
 import kr.co.koscom.miniproject.order.application.service.OrderQueryService;
 import kr.co.koscom.miniproject.stock.application.service.StockApplicationService;
@@ -18,6 +18,7 @@ public class LimitSellOrderListener {
 
     private final OrderQueryService orderQueryService;
     private final OrderExecutionService orderExecutionService;
+    private final OrderApplicationService orderApplicationService;
     private final StockApplicationService stockApplicationService;
 
     @TransactionalEventListener
@@ -25,14 +26,15 @@ public class LimitSellOrderListener {
         log.info("Processing Limit Sell Order for Order ID: {}", event.getOrderId());
 
         OrderEntity order = orderQueryService.findById(event.getOrderId());
-        Integer currentMarketPrice = stockApplicationService.updateMarketPrice(order.getTicker());
+        Integer realtimeMarketPrice = stockApplicationService.retrieveRealtimeMarketPrice(order.getTicker());
 
-        if (currentMarketPrice >= order.getPrice()) {
-            log.info("Market price {} meets or exceeds limit price {}. Executing order immediately.", currentMarketPrice, order.getPrice());
-            orderExecutionService.executeMarketSellOrder(event.getUserId(), event.getOrderId());
+        if (realtimeMarketPrice > order.getPrice()) {
+            log.info("Market price {} meets or exceeds limit price {}. Executing order immediately.", realtimeMarketPrice, order.getPrice());
+            orderApplicationService.updateOrderPrice(order, realtimeMarketPrice);
+            orderExecutionService.executeSellOrder(event.getUserId(), event.getOrderId());
         } else {
-            log.info("Market price {} is below limit price {}. Adding to pending queue.", currentMarketPrice, order.getPrice());
-            orderQueryService.addToPendingQueue(order);
+            log.info("Market price {} is below limit price {}. Adding to pending queue.", realtimeMarketPrice, order.getPrice());
+            orderApplicationService.addToWaitingQueue(order);
         }
     }
 }

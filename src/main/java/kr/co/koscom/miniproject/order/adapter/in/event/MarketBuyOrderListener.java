@@ -20,24 +20,20 @@ public class MarketBuyOrderListener {
     private final OrderQueryService orderQueryService;
     private final OrderExecutionService orderExecutionService;
     private final StockApplicationService stockApplicationService;
-    public static int repeatCount = 0;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void handleMarketBuyOrder(MarketBuyOrderEvent event) {
-        log.info("📌 MarketBuyOrderEvent 발생 {} ", repeatCount++);
-
+        log.info("MarketBuyOrderListener : handleMarketBuyOrder start()", event.getOrderId());
         OrderEntity order = orderQueryService.findById(event.getOrderId());
 
         if (isAlreadyExecuted(order)) {
             return;
         }
 
-        Integer realtimeMarketPrice = stockApplicationService.updateMarketPrice(order.getTicker());
+        Integer realtimeMarketPrice = stockApplicationService.retrieveRealtimeMarketPrice(order.getTicker());
         order.updatePrice(realtimeMarketPrice);
-
-        log.info("AFTER_COMMIT: Executing Market Buy Order for Order ID: {}", event.getOrderId());
-
-        orderExecutionService.executeMarketBuyOrder(event.getUserId(), event.getOrderId());
+        orderExecutionService.executeBuyOrder(event.getUserId(), event.getOrderId());
+        log.info("MarketBuyOrderListener : Executing Market Buy Order for Order ID: {}, realtimePrice: {}", event.getOrderId(), realtimeMarketPrice);
     }
 
     private static boolean isAlreadyExecuted(OrderEntity order) {

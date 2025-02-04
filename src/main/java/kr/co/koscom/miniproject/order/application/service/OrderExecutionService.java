@@ -28,7 +28,7 @@ public class OrderExecutionService {
     private final OrderService orderService;
     private final OrderQueryService orderQueryService;
 
-    public void executeMarketBuyOrder(final Long userId, final Long orderId) {
+    public void executeBuyOrder(final Long userId, final Long orderId) {
         log.info("Executing Market Buy Order for Order ID: {}", orderId);
         OrderEntity order = orderQueryService.findById(orderId);
         UserEntity user = userQueryService.findById(userId);
@@ -50,7 +50,7 @@ public class OrderExecutionService {
         userQueryService.save(user);
     }
 
-    public void executeMarketSellOrder(Long userId, Long orderId) {
+    public void executeSellOrder(Long userId, Long orderId) {
         log.info("Executing Market Sell Order for Order ID: {}", orderId);
 
         OrderEntity order = orderQueryService.findById(orderId);

@@ -2,7 +2,7 @@ package kr.co.koscom.miniproject.stock.application.service;
 
 import kr.co.koscom.miniproject.common.adapter.out.client.naver.stock.NaverStockResponse;
 import kr.co.koscom.miniproject.common.adapter.out.client.naver.stock.StockInformationResponse;
-import kr.co.koscom.miniproject.common.application.port.out.NaverStockClientPort;
+import kr.co.koscom.miniproject.common.application.port.out.StockClientPort;
 import kr.co.koscom.miniproject.common.infrastructure.annotation.ApplicationService;
 import kr.co.koscom.miniproject.stock.application.dto.request.CreateStockRequest;
 import kr.co.koscom.miniproject.stock.application.dto.response.CreateStockResponse;
@@ -15,10 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class StockApplicationService {
 
-    private final NaverStockClientPort naverStockClientPort;
+    private final StockClientPort naverStockClientPort;
     private final StockQueryService stockQueryService;
 
-    public Integer updateMarketPrice(String ticker) {
+    public Integer retrieveRealtimeMarketPrice(String ticker) {
         Integer realtimeMarketPrice = naverStockClientPort
             .scrapStock(ticker)
             .getFirstStockData()

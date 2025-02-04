@@ -1,6 +1,7 @@
 package kr.co.koscom.miniproject.common.adapter.in.rest;
 
 import kr.co.koscom.miniproject.common.application.dto.request.AnalyzeCommandRequest;
+import kr.co.koscom.miniproject.common.application.dto.request.SpeechToText64Request;
 import kr.co.koscom.miniproject.common.application.dto.request.SpeechToTextRequest;
 import kr.co.koscom.miniproject.common.application.dto.response.AnalyzeTextResponse;
 import kr.co.koscom.miniproject.common.application.dto.response.SpeechToTextResponse;
@@ -26,7 +27,8 @@ public class OpenAiController implements OpenAiControllerDocs {
 
     @Override
     public ResponseEntity<SpeechToTextResponse> speechToText(MultipartFile audioFile) {
-        log.info("OpenAiController : speechToText() : audioFile {}", audioFile.getOriginalFilename());
+        log.info("OpenAiController : speechToText() : audioFile.getOriginalFilename {}", audioFile.getOriginalFilename());
+        log.info("OpenAiController : speechToText() : audioFile.toString() {}", audioFile.toString());
         return ResponseEntity.ok(openAiApplicationService.speechToText(audioFile));
     }
 }

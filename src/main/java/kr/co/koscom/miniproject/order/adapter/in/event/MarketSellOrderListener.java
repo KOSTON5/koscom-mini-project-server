@@ -21,15 +21,14 @@ public class MarketSellOrderListener {
 
     @TransactionalEventListener
     public void handleMarketSellOrder(MarketSellOrderEvent event) {
-        log.info("BEFORE_COMMIT: Updating Order Price for Order ID: {}", event.getOrderId());
+        log.info("MarketSellOrderListener : handleMarketSellOrder() Start: {}", event.getOrderId());
 
         OrderEntity order = orderQueryService.findById(event.getOrderId());
-        Integer realtimeMarketPrice = stockApplicationService.updateMarketPrice(order.getTicker());
+        Integer realtimeMarketPrice = stockApplicationService.retrieveRealtimeMarketPrice(order.getTicker());
 
         order.updatePrice(realtimeMarketPrice);
-        log.info("AFTER_COMMIT: Executing Market Sell Order for Order ID: {}", event.getOrderId());
-
-        orderExecutionService.executeMarketSellOrder(event.getUserId(), event.getOrderId());
+        orderExecutionService.executeSellOrder(event.getUserId(), event.getOrderId());
+        log.info("Executing Market Sell Order for Order ID: {}", event.getOrderId());
     }
 }
 

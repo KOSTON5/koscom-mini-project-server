@@ -3,6 +3,7 @@ package kr.co.koscom.miniproject.common.adapter.in.rest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.co.koscom.miniproject.common.application.dto.request.AnalyzeCommandRequest;
+import kr.co.koscom.miniproject.common.application.dto.request.SpeechToText64Request;
 import kr.co.koscom.miniproject.common.application.dto.request.SpeechToTextRequest;
 import kr.co.koscom.miniproject.common.application.dto.response.AnalyzeTextResponse;
 import kr.co.koscom.miniproject.common.application.dto.response.SpeechToTextResponse;
@@ -28,5 +29,4 @@ public interface OpenAiControllerDocs {
     ResponseEntity<SpeechToTextResponse> speechToText(
         @RequestPart("audioFile") MultipartFile audioFile
     );
-
 }

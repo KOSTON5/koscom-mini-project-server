@@ -3,8 +3,8 @@ package kr.co.koscom.miniproject.order.application.service;
 import java.util.Optional;
 import kr.co.koscom.miniproject.common.application.dto.request.AnalyzeCommandRequest;
 import kr.co.koscom.miniproject.common.application.dto.response.AnalyzeTextResponse;
-import kr.co.koscom.miniproject.common.application.port.out.NaverStockClientPort;
 import kr.co.koscom.miniproject.common.application.port.out.OpenAiClientPort;
+import kr.co.koscom.miniproject.common.application.port.out.StockClientPort;
 import kr.co.koscom.miniproject.common.infrastructure.annotation.ApplicationService;
 import kr.co.koscom.miniproject.common.infrastructure.exception.OpenAiChatException;
 import kr.co.koscom.miniproject.order.application.dto.request.AnalyzeOrderRequest;
@@ -12,6 +12,9 @@ import kr.co.koscom.miniproject.order.application.dto.request.CancelOrderRequest
 import kr.co.koscom.miniproject.order.application.dto.request.ExecuteOrderRequest;
 import kr.co.koscom.miniproject.order.application.dto.response.AnalyzeOrderResponse;
 import kr.co.koscom.miniproject.order.application.dto.response.ExecuteOrderResponse;
+import kr.co.koscom.miniproject.order.application.dto.response.RetrieveOrderResponse;
+import kr.co.koscom.miniproject.order.application.event.LimitBuyOrderEvent;
+import kr.co.koscom.miniproject.order.application.event.LimitSellOrderEvent;
 import kr.co.koscom.miniproject.order.application.event.MarketBuyOrderEvent;
 import kr.co.koscom.miniproject.order.application.event.MarketSellOrderEvent;
 import kr.co.koscom.miniproject.order.domain.entity.OrderEntity;
@@ -30,16 +33,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @RequiredArgsConstructor
 @ApplicationService
-@Transactional
+@Transactional(readOnly = true)
 public class OrderApplicationService {
 
     private final OpenAiClientPort<AnalyzeCommandRequest, AnalyzeTextResponse> openAiClient;
-    private final NaverStockClientPort naverStockClient;
+    private final StockClientPort naverStockClient;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     private final OrderService orderService;
     private final OrderQueryService orderQueryService;
 
+    @Transactional
     public AnalyzeOrderResponse processLLMOrder(
         AnalyzeOrderRequest analyzeOrderRequest
     ) {
@@ -53,7 +57,8 @@ public class OrderApplicationService {
     }
 
     private AnalyzeTextResponse updatePrice(AnalyzeTextResponse analyzeTextResponse) {
-        log.info("OrderApplicationService : updatePrice() : analyzeTextResponse {}", analyzeTextResponse);
+        log.info("OrderApplicationService : updatePrice() : analyzeTextResponse {}",
+            analyzeTextResponse);
 
         if (analyzeTextResponse.isPriceEmpty()) {
             return analyzeTextResponse.toBuilder()
@@ -136,11 +141,14 @@ public class OrderApplicationService {
         Long currentUserId,
         ExecuteOrderRequest executeMarketOrderRequest
     ) {
+        log.info("OrderApplicationService : executeLimitBuyOrder() : currentUserId {}", currentUserId);
+
         applicationEventPublisher.publishEvent(
-            new MarketSellOrderEvent(this, currentUserId, executeMarketOrderRequest.orderId())
+            new LimitBuyOrderEvent(this, currentUserId, executeMarketOrderRequest.orderId())
         );
 
         OrderEntity order = orderQueryService.findById(executeMarketOrderRequest.orderId());
+        log.info("OrderApplicationService : executeLimitBuyOrder() : order {}", order.getPrice());
         return ExecuteOrderResponse.from(order);
     }
 
@@ -149,16 +157,38 @@ public class OrderApplicationService {
         ExecuteOrderRequest executeMarketOrderRequest
     ) {
         applicationEventPublisher.publishEvent(
-            new MarketSellOrderEvent(this, currentUserId, executeMarketOrderRequest.orderId())
+            new LimitSellOrderEvent(this, currentUserId, executeMarketOrderRequest.orderId())
         );
 
         OrderEntity order = orderQueryService.findById(executeMarketOrderRequest.orderId());
         return ExecuteOrderResponse.from(order);
     }
 
+    @Transactional
     public void cancelOrder(
         CancelOrderRequest cancelOrderRequest
     ) {
         orderService.cancelOrder(cancelOrderRequest.orderId());
+    }
+
+    @Transactional
+    public void addToWaitingQueue(OrderEntity order) {
+        orderService.changeOrderStatus(order, OrderStatus.WAITING);
+        orderQueryService.update(order);
+    }
+
+    @Transactional
+    public void updateOrderPrice(OrderEntity order, Integer currentMarketPrice) {
+        log.info("OrderApplicationService : updateOrderPrice() : order {} currentMarketPrice {}", order, currentMarketPrice);
+
+        OrderEntity updatedOrder = orderService.updateOrderPrice(order, currentMarketPrice);
+        orderQueryService.update(updatedOrder);
+    }
+
+    public RetrieveOrderResponse retrieveOrder(Long orderId) {
+        OrderEntity order = orderQueryService.findById(orderId);
+        log.info("OrderApplicationService : retrieveOrder() : order {}", order.getPrice());
+
+        return RetrieveOrderResponse.from(order);
     }
 }

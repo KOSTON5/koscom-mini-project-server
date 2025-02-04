@@ -5,6 +5,7 @@ import kr.co.koscom.miniproject.order.application.dto.request.CancelOrderRequest
 import kr.co.koscom.miniproject.order.application.dto.request.ExecuteOrderRequest;
 import kr.co.koscom.miniproject.order.application.dto.response.AnalyzeOrderResponse;
 import kr.co.koscom.miniproject.order.application.dto.response.ExecuteOrderResponse;
+import kr.co.koscom.miniproject.order.application.dto.response.RetrieveOrderResponse;
 import kr.co.koscom.miniproject.order.application.service.OrderApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -53,8 +54,7 @@ public class OrderController implements OrderControllerDocs {
         Long userId,
         ExecuteOrderRequest executeOrderRequest
     ) {
-        return ResponseEntity.ok(orderApplicationService.executeLimitBuyOrder(userId,
-            executeOrderRequest));
+        return ResponseEntity.ok(orderApplicationService.executeLimitBuyOrder(userId, executeOrderRequest));
     }
 
     @Override
@@ -62,23 +62,15 @@ public class OrderController implements OrderControllerDocs {
         Long userId,
         ExecuteOrderRequest executeOrderRequest
     ) {
-        return ResponseEntity.ok(orderApplicationService.executeLimitSellOrder(userId,
-            executeOrderRequest));
+        return ResponseEntity.ok(orderApplicationService.executeLimitSellOrder(userId, executeOrderRequest));
+    }
+
+    @Override
+    public ResponseEntity<RetrieveOrderResponse> retrieveOrder(
+        Long orderId) {
+        return ResponseEntity.ok(
+            orderApplicationService.retrieveOrder(orderId)
+        );
     }
 }
 
-//@Override
-//    public ResponseEntity<Void> executeBuyOrder(
-//        ExecuteOrderRequest executeOrderRequest
-//    ) {
-//        orderApplicationService.executeBuyOrder(executeOrderRequest);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @Override
-//    public ResponseEntity<Void> executeSellOrder(
-//        ExecuteOrderRequest executeOrderRequest
-//    ) {
-//        orderApplicationService.executeSellOrder(executeOrderRequest);
-//        return ResponseEntity.ok().build();
-//    }

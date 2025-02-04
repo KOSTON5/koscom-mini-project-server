@@ -1,6 +1,7 @@
 package kr.co.koscom.miniproject.order.adapter.in.event;
 
 import kr.co.koscom.miniproject.order.application.event.LimitBuyOrderEvent;
+import kr.co.koscom.miniproject.order.application.service.OrderApplicationService;
 import kr.co.koscom.miniproject.order.application.service.OrderExecutionService;
 import kr.co.koscom.miniproject.order.application.service.OrderQueryService;
 import kr.co.koscom.miniproject.stock.application.service.StockApplicationService;
@@ -18,16 +19,23 @@ public class LimitBuyOrderListener {
 
     private final OrderQueryService orderQueryService;
     private final OrderExecutionService orderExecutionService;
+    private final OrderApplicationService orderApplicationService;
     private final StockApplicationService stockApplicationService;
 
-    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    @TransactionalEventListener
     public void handleLimitBuyOrder(LimitBuyOrderEvent event) {
-        log.info("BEFORE_COMMIT: Updating Order Price for Order ID: {}", event.getOrderId());
+        log.info("LimitBuyOrderListener : handleLimitBuyOrder() Start: {}", event.getOrderId());
 
         OrderEntity order = orderQueryService.findById(event.getOrderId());
-        Integer realtimeMarketPrice = stockApplicationService.updateMarketPrice(order.getTicker());
+        Integer realtimeMarketPrice = stockApplicationService.retrieveRealtimeMarketPrice(
+            order.getTicker());
 
-        order.updatePrice(realtimeMarketPrice);
-        orderExecutionService.executeMarketBuyOrder(event.getUserId(), event.getOrderId());
+        if (realtimeMarketPrice < order.getPrice()) {
+            order.updatePrice(realtimeMarketPrice);
+            orderApplicationService.updateOrderPrice(order, realtimeMarketPrice);
+            orderExecutionService.executeBuyOrder(event.getUserId(), event.getOrderId());
+        } else {
+            orderApplicationService.addToWaitingQueue(order);
+        }
     }
 }

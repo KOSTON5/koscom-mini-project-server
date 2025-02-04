@@ -1,14 +1,14 @@
 package kr.co.koscom.miniproject.common.adapter.out.client.naver.stock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.co.koscom.miniproject.common.application.port.out.NaverStockClientPort;
+import kr.co.koscom.miniproject.common.application.port.out.StockClientPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @RequiredArgsConstructor
 @Component
-public class NaverStockClient implements NaverStockClientPort {
+public class NaverStockClient implements StockClientPort {
 
     private final WebClient webClient;
     private final ObjectMapper objectMapper;

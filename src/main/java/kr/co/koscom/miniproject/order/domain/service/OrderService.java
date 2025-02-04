@@ -46,4 +46,10 @@ public class OrderService {
         log.info("OrderService : executeOrder() : executionTime {}", order.getExecutionTime());
         return order;
     }
+
+    @Transactional
+    public OrderEntity updateOrderPrice(OrderEntity order, Integer currentMarketPrice) {
+        order.updatePrice(currentMarketPrice);
+        return order;
+    }
 }

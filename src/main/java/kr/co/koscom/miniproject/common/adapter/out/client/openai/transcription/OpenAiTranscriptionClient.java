@@ -1,8 +1,7 @@
 package kr.co.koscom.miniproject.common.adapter.out.client.openai.transcription;
 
 import java.io.IOException;
-import kr.co.koscom.miniproject.common.application.port.out.OpenAiClientPort;
-import kr.co.koscom.miniproject.common.infrastructure.exception.OpenAiChatException;
+import kr.co.koscom.miniproject.common.application.port.out.TranscriptionClientPort;
 import kr.co.koscom.miniproject.common.infrastructure.exception.OpenAiTranscriptionException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class OpenAiTranscriptClient implements OpenAiClientPort<MultipartFile, String> {
+public class OpenAiTranscriptionClient implements TranscriptionClientPort<MultipartFile, String> {
 
     private final WebClient webClient;
 
@@ -29,7 +28,7 @@ public class OpenAiTranscriptClient implements OpenAiClientPort<MultipartFile, S
 
     @Override
     public String processRequest(MultipartFile audioFile) {
-        log.info("OpenAiTranscriptClient : chat() : audioFile {}", audioFile.getOriginalFilename());
+        log.info("OpenAiTranscriptionClient : chat() : audioFile {}", audioFile.getOriginalFilename());
 
         try {
             ByteArrayResource fileResource = new ByteArrayResource(audioFile.getBytes()) {
