@@ -4,12 +4,15 @@ import kr.co.koscom.miniproject.common.adapter.out.client.naver.stock.NaverStock
 import kr.co.koscom.miniproject.common.adapter.out.client.naver.stock.StockInformationResponse;
 import kr.co.koscom.miniproject.common.application.port.out.NaverStockClientPort;
 import kr.co.koscom.miniproject.common.infrastructure.annotation.ApplicationService;
+import kr.co.koscom.miniproject.stock.application.dto.request.CreateStockRequest;
+import kr.co.koscom.miniproject.stock.application.dto.response.CreateStockResponse;
 import kr.co.koscom.miniproject.stock.domain.entity.StockEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @ApplicationService
+@Transactional(readOnly = true)
 public class StockApplicationService {
 
     private final NaverStockClientPort naverStockClientPort;
@@ -57,5 +60,18 @@ public class StockApplicationService {
             .build();
 
         return stockQueryService.save(stock);
+    }
+
+    public CreateStockResponse createStock(CreateStockRequest request) {
+        StockEntity stock = StockEntity.builder()
+            .ticker(request.ticker())
+            .name(request.name())
+            .currentPrice(request.currentPrice())
+            .tradingVolume(request.tradingVolume())
+            .fluctuationRate(request.fluctuationRate())
+            .logoImageUrl(request.logoImageUrl())
+            .build();
+
+        return new CreateStockResponse(stockQueryService.save(stock).getId());
     }
 }

@@ -32,7 +32,6 @@ public class OpenAiTranscriptClient implements OpenAiClientPort<MultipartFile, S
         log.info("OpenAiTranscriptClient : chat() : audioFile {}", audioFile.getOriginalFilename());
 
         try {
-            // Convert MultipartFile to ByteArrayResource
             ByteArrayResource fileResource = new ByteArrayResource(audioFile.getBytes()) {
 	@Override
 	public String getFilename() {

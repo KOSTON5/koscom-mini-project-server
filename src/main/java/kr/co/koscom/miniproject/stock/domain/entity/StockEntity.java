@@ -40,6 +40,9 @@ public class StockEntity {
     @Column(name = "stock_fluctuation_rate")
     private Double fluctuationRate;
 
+    @Column(name = "stock_logo_image_url")
+    private String logoImageUrl;
+
     public void updateCurrentPrice(final Integer realtimeMarketPrice) {
         this.currentPrice = realtimeMarketPrice;
     }
