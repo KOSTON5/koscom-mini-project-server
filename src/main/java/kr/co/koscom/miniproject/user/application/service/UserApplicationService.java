@@ -62,7 +62,7 @@ public class UserApplicationService {
         log.info("UserApplicationService : retrieveUserStocks(): userId={}", userId);
 
         Map<String, Integer> stockQuantities = userQueryService.findOrdersByUserIdExecutionTimeDesc(userId)
-            .stream()// 조건: 매칭된 주문만 잔량 계산
+            .stream()
             .collect(Collectors.groupingBy(
                 OrderEntity::getStockName,
 	Collectors.summingInt(OrderEntity::getQuantity)

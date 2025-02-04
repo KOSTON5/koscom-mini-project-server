@@ -44,7 +44,6 @@ public class OrderApplicationService {
         AnalyzeOrderRequest analyzeOrderRequest
     ) {
         AnalyzeTextResponse analyzeTextResponse = analyzeOrderText(analyzeOrderRequest);
-        CommandType commandType = CommandType.from(analyzeTextResponse.commandType());
 
         analyzeTextResponse = updatePrice(analyzeTextResponse);
 
@@ -56,10 +55,10 @@ public class OrderApplicationService {
     private AnalyzeTextResponse updatePrice(AnalyzeTextResponse analyzeTextResponse) {
         log.info("OrderApplicationService : updatePrice() : analyzeTextResponse {}", analyzeTextResponse);
 
-        if(analyzeTextResponse.isPriceEmpty()) {
+        if (analyzeTextResponse.isPriceEmpty()) {
             return analyzeTextResponse.toBuilder()
-                .price(addRealtimePrice(analyzeTextResponse.ticker()))
-                .build();
+	.price(addRealtimePrice(analyzeTextResponse.ticker()))
+	.build();
         }
 
         return analyzeTextResponse;
@@ -92,7 +91,7 @@ public class OrderApplicationService {
             .orderId(orderId)
             .ticker(analyzeTextResponse.ticker())
             .stockName(analyzeTextResponse.stockName())
-            .orderType(analyzeTextResponse.commandType())
+            .commandType(analyzeTextResponse.commandType())
             .orderCondition(analyzeTextResponse.orderCondition())
             .price(analyzeTextResponse.price())
             .quantity(analyzeTextResponse.quantity())
