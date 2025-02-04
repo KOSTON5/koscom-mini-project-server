@@ -105,7 +105,7 @@ public class OrderApplicationService {
     ) {
         return Optional.ofNullable(analyzeOrderRequest)
             .map(AnalyzeOrderRequest::text)
-            .map(text -> openAiClient.chat(new AnalyzeCommandRequest(text)))
+            .map(text -> openAiClient.processRequest(new AnalyzeCommandRequest(text)))
             .orElseThrow(OpenAiChatException::new);
     }
 

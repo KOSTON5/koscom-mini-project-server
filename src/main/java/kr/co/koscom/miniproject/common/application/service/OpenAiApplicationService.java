@@ -1,7 +1,6 @@
 package kr.co.koscom.miniproject.common.application.service;
 
 import kr.co.koscom.miniproject.common.application.dto.request.AnalyzeCommandRequest;
-import kr.co.koscom.miniproject.common.application.dto.request.SpeechToTextRequest;
 import kr.co.koscom.miniproject.common.application.dto.response.AnalyzeTextResponse;
 import kr.co.koscom.miniproject.common.application.dto.response.SpeechToTextResponse;
 import kr.co.koscom.miniproject.common.application.port.out.OpenAiClientPort;
@@ -19,11 +18,11 @@ public class OpenAiApplicationService {
     private final OpenAiClientPort<MultipartFile, String> openAiTranscriptClient;
 
     public AnalyzeTextResponse analyzeText(final AnalyzeCommandRequest analyzeCommandRequest) {
-        return openAiAnalyzeClient.chat(analyzeCommandRequest);
+        return openAiAnalyzeClient.processRequest(analyzeCommandRequest);
     }
 
     public SpeechToTextResponse speechToText(final MultipartFile audioFile) {
         return new SpeechToTextResponse(
-            openAiTranscriptClient.chat(audioFile));
+            openAiTranscriptClient.processRequest(audioFile));
     }
 }

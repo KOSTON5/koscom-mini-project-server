@@ -28,7 +28,7 @@ public class OpenAiTranscriptClient implements OpenAiClientPort<MultipartFile, S
     private String API_KEY;
 
     @Override
-    public String chat(MultipartFile audioFile) {
+    public String processRequest(MultipartFile audioFile) {
         log.info("OpenAiTranscriptClient : chat() : audioFile {}", audioFile.getOriginalFilename());
 
         try {

@@ -15,8 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class OpenAiAnalyzeTextClient implements
-    OpenAiClientPort<AnalyzeCommandRequest, AnalyzeTextResponse> {
+public class OpenAiAnalyzeTextClient implements OpenAiClientPort<AnalyzeCommandRequest, AnalyzeTextResponse> {
 
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
@@ -97,7 +96,7 @@ public class OpenAiAnalyzeTextClient implements
         + "- \"다시 한번 강조하자면 PURE JSON 형태로 값을 보내줘. 바로 ObjectMapper로 DTO 클래스로 변환할거야\n"
         + "명령어는 다음과 같아 : ";
 
-    public AnalyzeTextResponse chat(AnalyzeCommandRequest request) {
+    public AnalyzeTextResponse processRequest(AnalyzeCommandRequest request) {
         final String text = PROMPT + request.command();
 
         String response = webClient.post()

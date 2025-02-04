@@ -10,6 +10,7 @@ import kr.co.koscom.miniproject.user.application.dto.response.CreateUserResponse
 import kr.co.koscom.miniproject.user.application.dto.response.DepositUserResponse;
 import kr.co.koscom.miniproject.user.application.dto.response.RetrieveUserAssetResponse;
 import kr.co.koscom.miniproject.user.application.dto.response.RetrieveUserOrdersResponse;
+import kr.co.koscom.miniproject.user.application.dto.response.RetrieveUserStocksResponse;
 import kr.co.koscom.miniproject.user.application.dto.response.WithdrawUserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,13 @@ public interface UserControllerDocs {
     ResponseEntity<RetrieveUserOrdersResponse> retrieveUserOrders(
         @RequestHeader(name = "X-USER-ID") Long userId
     );
+
+    @Operation(summary = "사용자 주식 잔량 조회", description = "사용자 주식 잔량을 조회하는 API 입니다.")
+    @GetMapping("/stocks")
+    ResponseEntity<RetrieveUserStocksResponse> retrieveUserStocks(
+        @RequestHeader(name = "X-USER-ID") Long userId
+    );
+
 
     @Operation(summary = "사용자 생성", description = "사용자를 생성하는 API 입니다.")
     @PostMapping

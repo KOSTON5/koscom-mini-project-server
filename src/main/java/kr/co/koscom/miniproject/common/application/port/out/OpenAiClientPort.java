@@ -6,5 +6,5 @@ package kr.co.koscom.miniproject.common.application.port.out;
  * 애플리케이션 서비스는 같은 패키지 내에 있는 클래스를 의존할 수 있다.
  */
 public interface OpenAiClientPort<T, R> {
-    R chat(T request);
+    R processRequest(T request);
 }

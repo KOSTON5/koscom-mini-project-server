@@ -7,6 +7,7 @@ import kr.co.koscom.miniproject.user.application.dto.response.DepositUserRespons
 import kr.co.koscom.miniproject.user.application.dto.response.RetrieveUserAssetResponse;
 import kr.co.koscom.miniproject.user.application.dto.request.WithdrawUserRequest;
 import kr.co.koscom.miniproject.user.application.dto.response.RetrieveUserOrdersResponse;
+import kr.co.koscom.miniproject.user.application.dto.response.RetrieveUserStocksResponse;
 import kr.co.koscom.miniproject.user.application.dto.response.WithdrawUserResponse;
 import kr.co.koscom.miniproject.user.application.service.UserApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,13 @@ public class UserController implements UserControllerDocs {
         final Long userId
     ) {
         return ResponseEntity.ok(userApplicationService.retrieveUserOrders(userId));
+    }
+
+    @Override
+    public ResponseEntity<RetrieveUserStocksResponse> retrieveUserStocks(
+        final Long userId
+    ) {
+        return ResponseEntity.ok(userApplicationService.retrieveUserStocks(userId));
     }
 
     @Override
